@@ -6,7 +6,7 @@
 
 ## 背景
 
-Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗位、发起分析、查看任务进度和证据化报告。后端是独立仓库的 NestJS 服务，接口契约以后端Zod Schema为真源（见[后端接口契约规范](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/api-contract.md)）。后端文档曾把前端框架列为“Vue 3 + TypeScript 或 React”待定。
+Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗位、发起分析、查看任务进度和证据化报告。后端是独立仓库的 NestJS 服务，接口契约以后端Zod Schema为真源（见[后端接口契约规范](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/api-contract.md)）。后端文档曾把前端框架列为“Vue 3 + TypeScript 或 React”待定。
 
 ## 决策
 

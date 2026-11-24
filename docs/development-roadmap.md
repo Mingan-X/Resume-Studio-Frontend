@@ -1,6 +1,6 @@
 # 开发计划
 
-本文是前端阶段划分、任务拆分和验收标准的唯一来源；完成情况记录在[开发进度](progress.md)。后端阶段见[后端开发计划](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/development-roadmap.md)。未标记为“已完成”的内容都不是已交付能力。
+本文是前端阶段划分、任务拆分和验收标准的唯一来源；完成情况记录在[开发进度](progress.md)。后端阶段见[后端开发计划](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/development-roadmap.md)。未标记为“已完成”的内容都不是已交付能力。
 
 ## 1. 阶段总览
 
@@ -85,7 +85,7 @@ F1.1与F1.2不依赖后端业务接口，可以立即开始。F2.x可以在后�
 
 ## 7. 待决策事项
 
-后端决策（D编号）见[后端开发计划 §6](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/development-roadmap.md#6-待决策事项)。前端自有决策：
+后端决策（D编号）见[后端开发计划 §6](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/development-roadmap.md#6-待决策事项)。前端自有决策：
 
 | 编号 | 决策 | 当前候选 | 确认条件 | 阻塞阶段 |
 |---|---|---|---|---|

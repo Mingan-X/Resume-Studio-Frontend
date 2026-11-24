@@ -57,4 +57,4 @@ location / { root /srv/resume-studio/dist; try_files $uri /index.html; add_heade
 ## 6. 发布与回滚
 
 - 每次发布保留上一版本的 `dist/`，回滚即切换到上一版本目录。
-- 前端发布依赖的后端接口必须先上线；破坏性接口变更按后端[契约变更流程](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/api-contract.md#11-契约变更流程)安排顺序。
+- 前端发布依赖的后端接口必须先上线；破坏性接口变更按后端[契约变更流程](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/api-contract.md#11-契约变更流程)安排顺序。

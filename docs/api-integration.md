@@ -1,6 +1,6 @@
 # API对接
 
-接口约定的唯一来源是后端的[接口契约规范](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/api-contract.md)，已实现接口见后端[HTTP API](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/api.md)。本文说明前端如何落实这些约定；两者冲突时以后端文档为准，并在前端提交问题记录。
+接口约定的唯一来源是后端的[接口契约规范](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/api-contract.md)，已实现接口见后端[HTTP API](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/api.md)。本文说明前端如何落实这些约定；两者冲突时以后端文档为准，并在前端提交问题记录。
 
 ## 1. 当前可对接的接口
 

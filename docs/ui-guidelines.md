@@ -1,6 +1,6 @@
 # 产品与界面规范
 
-本文定义页面内容、展示规则和视觉约定。业务含义以后端[业务需求](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/requirements.md)为准；页面路由见[架构 §6](architecture.md#6-路由)。
+本文定义页面内容、展示规则和视觉约定。业务含义以后端[业务需求](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/requirements.md)为准；页面路由见[架构 §6](architecture.md#6-路由)。
 
 ## 1. 用户与核心流程
 
