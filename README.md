@@ -2,7 +2,7 @@
 
 Resume Studio 的 Web 前端。求职者在这里上传简历、管理岗位、发起分析、查看任务进度，并阅读带证据的六维画像与岗位推荐报告。
 
-后端位于独立仓库 Resume-Studio-Backend（远程 [Mingan-X/Resume-Studio](https://github.com/Mingan-X/Resume-Studio)），负责全部业务计算，并且是接口契约的唯一来源。本地建议把两个仓库放在同一父目录下：
+后端位于独立仓库 Resume-Studio-Backend（远程 [Mingan-X/Resume-Studio](https://github.com/Mingan-X/Resume-Studio-Backend)），负责全部业务计算，并且是接口契约的唯一来源。本地建议把两个仓库放在同一父目录下：
 
 ```text
 Resume-Studio/
@@ -47,7 +47,7 @@ pnpm run dev
 | [构建与部署](docs/deployment.md) | 环境变量、安全响应头、缓存、反向代理 |
 | [ADR-0001](docs/decisions/0001-frontend-stack.md) | 技术栈决策 |
 
-后端相关文档：[接口契约规范](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/api-contract.md)、[业务需求](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/requirements.md)、[后端开发计划](https://github.com/Mingan-X/Resume-Studio/blob/master/docs/development-roadmap.md)。
+后端相关文档：[接口契约规范](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/api-contract.md)、[业务需求](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/requirements.md)、[后端开发计划](https://github.com/Mingan-X/Resume-Studio-Backend/blob/master/docs/development-roadmap.md)。
 
 ## 许可
 
