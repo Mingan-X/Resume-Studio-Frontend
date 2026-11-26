@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.2-T4 全局错误与通用状态（feature/f1.2-app-shell）
+
+- 新增加载/空/错误/正常内容组件、错误requestId展示与复制、复制失败提示和重试事件；健康页采用共享错误提示。全局Vue异常/未处理Promise只记录kind/requestId到开发控制台，未知异常转固定文案，不输出用户内容或堆栈；卸载移除监听。
+- typecheck、Lint、单元/组件32项、build、MSW E2E5项通过；共享UI行覆盖率100%。组件覆盖四种状态、复制成功/失败、404统一文案；全局异常测试确认不输出合成私密字符串。
+- 首次两次typecheck失败于Vue的unknown默认值限制，改为保留缺省undefined语义后通过；未修改严格选项。真实后端冒烟留待阶段回归。
+
 ## 2026-11-27 F1.2-T3 HTTP客户端（feature/f1.2-app-shell）
 
 - shared/api统一fetch、同源地址、15秒超时、取消、Zod响应校验、AppError与requestId；健康查询迁移至共享层。HTTP错误只展示契约安全message，非法JSON/HTML不透出。
