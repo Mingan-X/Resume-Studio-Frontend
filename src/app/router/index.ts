@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import { installGuards } from './guards';
+
 export function createApplicationRouter() {
   const pages = [
     { path: '/resumes', title: '简历' },
@@ -13,7 +15,7 @@ export function createApplicationRouter() {
     { path: '/reports/:reportId', title: '报告详情' },
     { path: '/login', title: '登录' },
   ];
-  return createRouter({
+  const router = createRouter({
     history: createWebHistory(),
     routes: [
       { path: '/', redirect: '/resumes' },
@@ -23,10 +25,13 @@ export function createApplicationRouter() {
         meta: { title },
       })),
       {
+        name: 'not-found',
         path: '/:pathMatch(.*)*',
         component: () => import('@/pages/NotFoundPage.vue'),
         meta: { title: '页面不存在' },
       },
     ],
   });
+  installGuards(router);
+  return router;
 }
