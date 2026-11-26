@@ -8,6 +8,13 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.2-T1 应用布局（feature/f1.2-app-shell，进行中）
+
+- F3.2-T1已合并并推送develop（1f68152），develop远端运行45873601513亦success；推送一次TLS失败后有限重试成功。
+- 装配Vue Query/Pinia/Element Plus与Router，顶栏、主导航、内容区、跳到内容链接；业务页面明确显示功能开发中且不请求业务接口。健康检查点击后才展开。主题变量集中管理，Element Plus显式按需导入。
+- registry/官方包README与peer核对、冻结安装、typecheck、Lint、单元/组件8项、build、MSW E2E 3项通过（含键盘导航与无业务请求）。最初全量UI注册首屏gzip 364.16 kB，改为按需注册后83.50 kB，无大chunk警告。
+- 真实后端冒烟本任务未重复运行（接口未变化，T5已有记录）；生产部署未执行。
+
 ## 2026-11-27 F3.2-T1 远端验证通过（feature/f3.2-ci，T1待验收）
 
 - 提交f2d274a的[GitHub Actions运行45873425074](https://github.com/Mingan-X/Resume-Studio-Frontend/actions/runs/45873425074)实际success：冻结安装、typecheck、Lint、单元/组件、build、Chromium安装、MSW E2E全部通过。此任务完成实现和验证，按no-ff合并develop并推送。

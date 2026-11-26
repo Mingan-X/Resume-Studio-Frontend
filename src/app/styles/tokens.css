@@ -9,6 +9,8 @@
   --text: #203044;
   --text-muted: #52647a;
   --brand: #2358a5;
+  --brand-soft: #e9f0fa;
+  --el-color-primary: var(--brand);
   --border: #ccd6e2;
   --success: #207349;
   --danger: #b32d34;

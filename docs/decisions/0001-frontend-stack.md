@@ -35,6 +35,10 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 
 ## 方案比较
 
+### F1.2-T1 实际安装（2026-11-27）
+
+Vue Router 5.5.1、Pinia 4.1.0、@vue/devtools-api 8.2.1、Element Plus 2.14.8。按registry复核peer：Router支持Vue3.5.34+、Vite7/8，Pinia需要Vue3.5.11+及非可选devtools-api，Element Plus支持Vue3.3.7+；与现有依赖兼容。均为ADR既定选型，成本为路由/状态和UI运行时体积；替代手写路由/表单以及其他组件库的理由保持原决策。官方文档：[Router](https://router.vuejs.org/)、[Pinia](https://pinia.vuejs.org/)、[Element Plus安装](https://element-plus.org/en-US/guide/installation.html)。
+
 ### F1.1-T5 实际安装（2026-11-27）
 
 Zod 4.6.7、@tanstack/vue-query 5.108.4、MSW 3.0.8。registry版本/engines/peers复核，Vue Query支持Vue 3.3+，MSW要求Node >=22.12。复用已选运行时校验和服务端缓存方案，替代手工断言/状态管理；MSW仅开发期，采用官方README及包类型注明的onUnhandledFrame选项。已检查vue-demi 0.14.10 postinstall及utils，仅切换包内Vue适配文件，allowBuilds精确批准；无全局允许脚本。MSW worker与官方文件SHA256一致且只在mock开发服务器提供，不复制进dist。官方入口：[Vue Query](https://tanstack.com/query/latest/docs/framework/vue/overview)、[MSW](https://mswjs.io/docs)、[Zod](https://zod.dev/)。冻结安装、组件和真实后端验证通过。
