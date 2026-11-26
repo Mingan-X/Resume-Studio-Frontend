@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.1-T3 单元与组件测试（feature/f1.1-project-setup）
+
+- 建立Vitest + Vue Test Utils + happy-dom，首页可见名称/用途组件测试；`pnpm test`默认生成HTML及JSON覆盖率报告（不提交），shared与feature model行覆盖率门槛80%。当前尚无这两类模块，不把全局50%误记为80%。
+- 冻结安装、typecheck、Lint、build通过；首次`pnpm test`失败（安装结束写回package.json覆盖了测试脚本），串行补齐脚本后测试1项通过。修复Vitest配置导入缺少扩展名的前向兼容警告。
+- 测试无需网络或后端；E2E尚未建立，未执行（T4）。
+
 ## 2026-11-27 F1.1-T2 类型与Lint（feature/f1.1-project-setup）
 
 - 建立ESLint flat config、Prettier、LF规则、禁止any/非空断言/v-html/未校验类型断言、类型导入及自动导入排序。架构规则解析alias与相对路径，强制层级、feature入口与generated访问边界。

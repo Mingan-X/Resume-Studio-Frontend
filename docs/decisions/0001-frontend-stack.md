@@ -35,6 +35,10 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 
 ## 方案比较
 
+### F1.1-T3 实际安装（2026-11-27）
+
+Vitest / @vitest/coverage-v8 5.1.2、@vue/test-utils 2.6.0、happy-dom 21.0.4。已复核registry版本/engines/peers（Vitest要求Node 22.12/24/26，Vite 6.4/7/8，coverage严格同版本；Vue Test Utils要求Vue 3）。沿用ADR选型，不改用Jest或jsdom；这些包只影响开发和CI安装。使用官方API：[Vitest配置](https://vitest.dev/config/)、[Vue Test Utils](https://test-utils.vuejs.org/guide/)。冻结安装与实际组件运行已通过。
+
 ### F1.1-T2 实际安装（2026-11-27）
 
 ESLint 10.15.0、@eslint/js 10.0.1、eslint-plugin-vue 10.12.1、typescript-eslint 8.74.0、@vue/eslint-config-typescript 14.9.0、Prettier 3.10.1、eslint-plugin-simple-import-sort 14.0.0。均为开发依赖，registry版本/engines/peers已复核，TS保持6.0.3以满足 `<6.1.0`；官方Vue ESLint配置README核对flat config写法。导入排序采用simple-import-sort（替代手工排序或更重的import resolver插件），成本仅开发期；架构路径规则本地实现，避免增加完整边界插件。官方说明：[Vue ESLint TS](https://github.com/vuejs/eslint-config-typescript)、[导入排序](https://github.com/lydell/eslint-plugin-simple-import-sort)、[Prettier](https://prettier.io/docs/configuration)。
