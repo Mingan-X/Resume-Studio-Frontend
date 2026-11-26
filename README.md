@@ -12,17 +12,17 @@ Resume-Studio/
 
 ## 当前状态
 
-**仓库只有文档，尚无代码、依赖或构建配置。** 第一个开发阶段是F1.1工程基线，见[开发计划](docs/development-roadmap.md)；完成情况见[开发进度](docs/progress.md)。
+**F1.1工程基线已实现，阶段待验收。** 当前首页显示真实后端健康状态，具备类型、Lint、单元/组件和E2E检查；简历、岗位、分析等业务页面尚未实现。见[开发计划](docs/development-roadmap.md)与[验证记录](docs/progress.md)。
 
-后端目前只实现了健康检查接口，业务页面需要等后端对应阶段交付后才能联调。
+前端目前只消费健康检查接口，其他接口在对应阶段按后端develop契约接入。
 
-## 技术栈（已确定，尚未安装）
+## 技术栈
 
 Vue 3 + TypeScript + Vite、Vue Router、TanStack Vue Query、Pinia、Element Plus、ECharts、Zod；测试使用 Vitest、Vue Test Utils、MSW、Playwright。选型理由与候选版本见[ADR-0001](docs/decisions/0001-frontend-stack.md)。
 
 运行环境与后端一致：Node.js 24.22.3、pnpm 12.x。
 
-## 本地运行（F1.1完成后可用）
+## 本地运行
 
 ```powershell
 pnpm install --frozen-lockfile
@@ -30,6 +30,18 @@ pnpm run dev
 ```
 
 开发服务器把 `/api` 与 `/health` 代理到 `http://127.0.0.1:3000`，需要先按后端README启动API。
+
+```powershell
+pnpm run typecheck
+pnpm run lint
+pnpm test
+pnpm run build
+pnpm exec playwright install chromium
+pnpm run test:e2e    # MSW流程，无需后端
+pnpm run test:smoke  # 真实后端，未启动时失败
+```
+
+`pnpm run preview`预览dist，不提供后端代理；真实联调用dev。E2E启动独立Vite实例，运行前关闭本项目手动启动的dev，避免Vite项目锁冲突。开发时可设置`VITE_ENABLE_MOCKS=true`启用MSW，生产构建禁止该值；mock不代表真实后端可用。
 
 ## 文档
 

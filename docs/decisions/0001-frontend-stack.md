@@ -1,7 +1,7 @@
 # ADR-0001：前端技术栈
 
 - 日期：2026-11-24
-- 状态：已采纳（对应后端决策D5）；依赖尚未安装，版本在F1.1接入时以冻结安装和真实编译验证
+- 状态：已采纳（对应后端决策D5）；F1.1已安装版本见下方各任务实际记录，其余仍为后续接入候选
 - 范围：Resume-Studio-Frontend 第一版
 
 ## 背景
@@ -34,6 +34,33 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 | 测试 | vitest 5.1.1、@vitest/coverage-v8 5.1.1、@vue/test-utils 2.6.0、happy-dom 21.0.4、msw 3.0.7、@playwright/test 1.65.1 | vitest要求Node `^22.12.0 \|\| ^24.0.0 \|\| >=26.0.0`；msw要求Node `>=22.12.0` |
 
 ## 方案比较
+
+### F1.1-T5 实际安装（2026-11-27）
+
+Zod 4.6.7、@tanstack/vue-query 5.108.4、MSW 3.0.8。registry版本/engines/peers复核，Vue Query支持Vue 3.3+，MSW要求Node >=22.12。复用已选运行时校验和服务端缓存方案，替代手工断言/状态管理；MSW仅开发期，采用官方README及包类型注明的onUnhandledFrame选项。已检查vue-demi 0.14.10 postinstall及utils，仅切换包内Vue适配文件，allowBuilds精确批准；无全局允许脚本。MSW worker与官方文件SHA256一致且只在mock开发服务器提供，不复制进dist。官方入口：[Vue Query](https://tanstack.com/query/latest/docs/framework/vue/overview)、[MSW](https://mswjs.io/docs)、[Zod](https://zod.dev/)。冻结安装、组件和真实后端验证通过。
+
+### F1.1-T4 实际安装（2026-11-27）
+
+@playwright/test 1.65.1，registry engines为Node >=20，兼容本机；已读取官方包README并按其文档安装Chromium。沿用已选E2E框架（替代Cypress），成本是浏览器缓存和CI下载，仅开发期依赖；真实页面打开已验证。[官方文档](https://playwright.dev/docs/intro)。
+
+### F1.1-T3 实际安装（2026-11-27）
+
+Vitest / @vitest/coverage-v8 5.1.2、@vue/test-utils 2.6.0、happy-dom 21.0.4。已复核registry版本/engines/peers（Vitest要求Node 22.12/24/26，Vite 6.4/7/8，coverage严格同版本；Vue Test Utils要求Vue 3）。沿用ADR选型，不改用Jest或jsdom；这些包只影响开发和CI安装。使用官方API：[Vitest配置](https://vitest.dev/config/)、[Vue Test Utils](https://test-utils.vuejs.org/guide/)。冻结安装与实际组件运行已通过。
+
+### F1.1-T2 实际安装（2026-11-27）
+
+ESLint 10.15.0、@eslint/js 10.0.1、eslint-plugin-vue 10.12.1、typescript-eslint 8.74.0、@vue/eslint-config-typescript 14.9.0、Prettier 3.10.1、eslint-plugin-simple-import-sort 14.0.0。均为开发依赖，registry版本/engines/peers已复核，TS保持6.0.3以满足 `<6.1.0`；官方Vue ESLint配置README核对flat config写法。导入排序采用simple-import-sort（替代手工排序或更重的import resolver插件），成本仅开发期；架构路径规则本地实现，避免增加完整边界插件。官方说明：[Vue ESLint TS](https://github.com/vuejs/eslint-config-typescript)、[导入排序](https://github.com/lydell/eslint-plugin-simple-import-sort)、[Prettier](https://prettier.io/docs/configuration)。
+
+### F1.1-T1 实际安装（2026-11-27）
+
+| 包 | 版本 | 用途与核对 |
+|---|---|---|
+| vue | 3.5.46 | 已选框架；官方Quick Start与registry核对 |
+| vite / @vitejs/plugin-vue | 8.4.0 / 6.0.11 | 开发服务器与Vue编译；替代手工打包配置，新增开发依赖成本；Node范围兼容24.22.3，plugin支持Vite 8 |
+| typescript / vue-tsc | 6.0.3 / 3.3.14 | TS与SFC检查；只用tsc不能检查Vue模板，vue-tsc要求TS >=5 |
+| @vue/tsconfig / @types/node | 0.9.1 / 24.19.4 | 官方严格基础配置与构建配置的Node类型，均为开发依赖 |
+
+已读取官方包内README（Vite、vue-tsc、@vue/tsconfig）并核对registry发布版本、engines/peers。官方入口：[Vue](https://vuejs.org/guide/quick-start.html)、[Vite](https://vite.dev/guide/)、[Vue TS配置](https://github.com/vuejs/tsconfig)。当前版本均仍有发布维护；精确版本与锁文件冻结安装已验证。pnpm自动记录的 `vite@8.4.0` release-age例外随workspace配置提交，不关闭全局供应链或peer校验。
 
 | 方案 | 结论与原因 |
 |---|---|
