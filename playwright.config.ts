@@ -16,7 +16,7 @@ export default defineConfig({
     { name: 'real', testMatch: '**/*.smoke.spec.ts', use: { ...devices['Desktop Chrome'] } },
   ],
   webServer: {
-    command: 'pnpm run dev --port 4173 --strictPort',
+    command: 'pnpm run dev --mode e2e --port 4173 --strictPort',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
     env: { VITE_ENABLE_MOCKS: process.argv.includes('--project=real') ? 'false' : 'true' },
