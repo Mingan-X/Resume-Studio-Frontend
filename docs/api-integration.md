@@ -22,6 +22,8 @@ OpenAPI产物可用之前：
 
 ## 3. HTTP客户端
 
+F1.2已实现本节客户端核心、XHR上传与EventSource基础封装。health已使用共享客户端；业务上传和SSE尚未接入。`tests/mocks/transportPlugin.ts`只在Vite的e2e模式提供本地传输测试，不属于后端契约；不会进入生产构建。
+
 `shared/api/client.ts` 是唯一调用 `fetch` 的位置，负责：
 
 - 基础路径 `/api/v1`，`credentials: 'same-origin'`。
