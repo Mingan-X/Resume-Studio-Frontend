@@ -28,12 +28,7 @@ export function stageLabel(stage: string): string {
   return stageLabels[stage] ?? stage;
 }
 export function retryTime(time: string): string {
-  return new Intl.DateTimeFormat(undefined, {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).format(new Date(time));
+  const date = new Date(time);
+  const twoDigits = (value: number) => String(value).padStart(2, '0');
+  return `${date.getFullYear()}-${twoDigits(date.getMonth() + 1)}-${twoDigits(date.getDate())} ${twoDigits(date.getHours())}:${twoDigits(date.getMinutes())}`;
 }

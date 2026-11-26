@@ -14,6 +14,6 @@ describe('任务状态展示', () => {
     expect(stageLabel('QUEUED')).toBe('等待处理');
     expect(stageLabel('FUTURE_STAGE')).toBe('FUTURE_STAGE');
     expect(statusLabels.RETRY_WAIT).toBe('等待重试');
-    expect(retryTime('2026-11-27T00:00:00.000Z')).toContain('2026');
+    expect(retryTime('2026-11-27T00:00:00.000Z')).toMatch(/^2026-11-\d{2} \d{2}:\d{2}$/);
   });
 });

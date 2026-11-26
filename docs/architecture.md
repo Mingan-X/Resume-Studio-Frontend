@@ -1,6 +1,6 @@
 # 前端架构
 
-状态：F1.1/F1.2已建立装配、布局、路由及输入守卫、共享HTTP/上传/SSE基础、通用状态与健康检查；业务页面仍为占位。下文任务轮询、业务接口和认证由后续阶段交付。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
+状态：F1.1–F1.3已建立应用骨架、共享层、生成契约、健康及任务进度/取消；简历、岗位、分析、报告和登录页面仍为占位。业务SSE和认证由后续阶段交付。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
 
 ## 1. 职责边界
 
@@ -135,6 +135,8 @@ F1.2实现：HTTP层承担最多两次重试，Vue Query关闭同一请求的额
 - 默认轮询 `GET /api/v1/tasks/:taskId`，间隔2秒；任务到达终态（`SUCCEEDED`、`PARTIAL`、`FAILED`、`CANCELLED`）后停止；页面不可见时暂停。
 - S3.1提供SSE后改为订阅 `/api/v1/tasks/:taskId/events`。浏览器原生EventSource重连时会自动携带 `Last-Event-ID`；SSE断开超过重试上限时回退到轮询。
 - 进度只显示后端给出的阶段和计数，不做时间估算或等速动画。
+
+F1.3已验证轮询、四终态停止、页面隐藏暂停/取消当前请求及可见后恢复。取消使用原生确认对话框，202只提示请求已提交；INVALID_STATE刷新当前任务。任务失败展示的requestId来自GET响应头（任务error本身无此字段），与任务数据一起保存在Query缓存；不向后端契约拼装字段。SSE基础已存在，但尚未用于任务页。
 
 ## 9. 安全
 

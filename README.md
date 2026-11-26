@@ -12,9 +12,9 @@ Resume-Studio/
 
 ## 当前状态
 
-**F1.1与F1.2已实现，阶段待验收；提前CI已通过远端验证。** 当前具备主布局、路由校验、共享网络层和错误处理，侧栏可展开真实后端健康状态；简历、岗位、分析等业务页面仍显示“功能开发中”。见[开发计划](docs/development-roadmap.md)与[验证记录](docs/progress.md)。
+**F1.1–F1.3已实现，阶段待验收；提前CI已通过远端验证。** 当前具备应用骨架、共享网络层、生成契约、任务进度与取消，已用真实后端合成任务联调；简历、岗位、分析和报告业务页面仍显示“功能开发中”。见[开发计划](docs/development-roadmap.md)与[验证记录](docs/progress.md)。
 
-前端目前只消费健康检查接口，其他接口在对应阶段按后端develop契约接入。
+前端消费health及任务查询/取消；契约来源见[快照记录](contracts/SOURCE.md)。其他接口在对应后端阶段合并后接入。
 
 ## 技术栈
 
@@ -39,9 +39,13 @@ pnpm run build
 pnpm exec playwright install chromium
 pnpm run test:e2e    # MSW流程，无需后端
 pnpm run test:smoke  # 真实后端，未启动时失败
+pnpm run test:contract
+pnpm run test:smoke:tasks # 使用后端已有编译产物和本项目数据库，见测试文档
 ```
 
 `pnpm run preview`预览dist，不提供后端代理；真实联调用dev。E2E启动独立Vite实例，运行前关闭本项目手动启动的dev，避免Vite项目锁冲突。开发时可设置`VITE_ENABLE_MOCKS=true`启用MSW，生产构建禁止该值；mock不代表真实后端可用。
+
+`dev`、`typecheck`、`test`、`build`先运行`api:generate`，无需手工创建src/generated。生成会写本地派生文件；运行E2E期间不要并行生成或编辑源码，以免开发服务器热更新影响断言。
 
 ## 文档
 
