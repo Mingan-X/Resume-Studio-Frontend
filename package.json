@@ -8,16 +8,17 @@
     "pnpm": ">=12 <13"
   },
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
-    "build": "vue-tsc --noEmit && vite build",
+    "dev": "pnpm run api:generate && vite --host 127.0.0.1",
+    "build": "pnpm run api:generate && vue-tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "typecheck": "vue-tsc --noEmit",
+    "typecheck": "pnpm run api:generate && vue-tsc --noEmit",
     "lint": "eslint . --max-warnings=0 && prettier . --check",
     "format": "prettier . --write",
-    "test": "vitest run --coverage",
+    "test": "pnpm run api:generate && vitest run --coverage",
     "test:unit": "vitest run",
     "test:e2e": "playwright test --project=ui",
-    "test:smoke": "playwright test --project=real"
+    "test:smoke": "playwright test --project=real",
+    "api:generate": "openapi-ts"
   },
   "dependencies": {
     "@tanstack/vue-query": "5.108.4",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@hey-api/openapi-ts": "0.99.0",
     "@playwright/test": "1.65.1",
     "@types/node": "24.19.4",
     "@vitejs/plugin-vue": "6.0.11",

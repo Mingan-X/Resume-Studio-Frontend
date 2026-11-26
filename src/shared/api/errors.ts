@@ -1,12 +1,9 @@
 import { z } from 'zod';
 
-// 后端src/contracts/http.ts；F1.3接入生成Schema。
-const errorBodySchema = z.object({
-  code: z.string(),
-  message: z.string(),
-  retryable: z.boolean(),
-  requestId: z.uuid(),
-});
+import { zErrorResponse } from '@/generated/zod.gen';
+
+// 后端允许兼容新增错误码；结构来自生成Schema，未知code走通用处理。
+const errorBodySchema = zErrorResponse.extend({ code: z.string() });
 export type ErrorKind = 'http' | 'network' | 'contract' | 'aborted';
 export interface ErrorOptions {
   kind: ErrorKind;

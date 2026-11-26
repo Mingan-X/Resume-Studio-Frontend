@@ -8,6 +8,14 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.3-T1 契约快照与生成（feature/f1.3-contract-tasks，进行中）
+
+- F1.2已合并并推送develop（9f96603）与阶段分支，develop远端CI45876655026 success；连续TLS握手失败后分支/develop分开推送成功，保留证书校验。
+- 后端fetch确认S1.4-T8/T9已合并origin/develop，提交01d9a36c882d5e7c0e0945b4bc7a2ed6ee11cc66。快照来自该提交docs/openapi.json（非后端工作区），SOURCE记录SHA/日期，单独提交b8a076c。仅包含health与任务查询/取消3条路径。
+- @hey-api/openapi-ts生成类型与Zod4 Schema，health删除手写定义，错误结构消费生成Schema（兼容新增错误code）。dev/typecheck/test/build先生成，不提交src/generated。直接运行生成Schema确认忽略health扩展字段和任务双分支联合。
+- 冻结安装、typecheck、Lint、单元/组件45项、build、E2E7项通过。首轮typecheck发现0.99不接受旧版version插件选项，删除后通过；测试一轮101.76秒主要在模块/环境加载，未放宽超时或覆盖门槛。
+- 任务页真实联调尚未执行，安排T3/T4；无后端文件修改。
+
 ## 2026-11-27 F1.2-T6 文档与阶段回归（feature/f1.2-app-shell，待验收）
 
 - README、架构和API/测试文档更新至实际边界，路线图F1.2待验收；T1–T6分别提交。共享层已可复用，所有业务页仍为占位，未描述为完成。

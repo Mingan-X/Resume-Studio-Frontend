@@ -35,6 +35,10 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 
 ## 方案比较
 
+### F1.3-T1 实际安装（2026-11-27）
+
+@hey-api/openapi-ts 0.99.0，registry engines为Node>=22.18，TypeScript peer支持6.0，兼容本项目。读取官方包README并实测typescript/Zod4插件，生成z.object默认忽略扩展字段，支持任务oneOf联合及UUID/时间。沿用既定生成器，替代手写契约；仅开发依赖，生成目录不提交，构建/类型/测试前生成。官方说明：[生成器](https://heyapi.dev/docs/openapi/typescript/get-started)。
+
 ### F1.2-T1 实际安装（2026-11-27）
 
 Vue Router 5.5.1、Pinia 4.1.0、@vue/devtools-api 8.2.1、Element Plus 2.14.8。按registry复核peer：Router支持Vue3.5.34+、Vite7/8，Pinia需要Vue3.5.11+及非可选devtools-api，Element Plus支持Vue3.3.7+；与现有依赖兼容。均为ADR既定选型，成本为路由/状态和UI运行时体积；替代手写路由/表单以及其他组件库的理由保持原决策。官方文档：[Router](https://router.vuejs.org/)、[Pinia](https://pinia.vuejs.org/)、[Element Plus安装](https://element-plus.org/en-US/guide/installation.html)。
