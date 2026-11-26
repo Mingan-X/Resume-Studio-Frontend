@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.1-T2 类型与Lint（feature/f1.1-project-setup）
+
+- 建立ESLint flat config、Prettier、LF规则、禁止any/非空断言/v-html/未校验类型断言、类型导入及自动导入排序。架构规则解析alias与相对路径，强制层级、feature入口与generated访问边界。
+- `pnpm run typecheck`、`pnpm run lint`（零警告）、`pnpm run build`通过。临时文件故意加入v-html、alias/相对路径跨feature内部导入、shared→app导入，四项都被Lint拒绝；临时文件已删除。
+- 尚未建立单元/E2E框架，测试未执行（T3/T4）。格式检查覆盖代码及配置，已有Markdown暂保留原格式，文档链接在T6核对。
+
 ## 2026-11-27 F1.1-T1 项目初始化（feature/f1.1-project-setup，进行中）
 
 - 建立Vue入口、Vite配置、严格TS配置、精确依赖、Node版本与忽略规则。阶段状态为进行中。
