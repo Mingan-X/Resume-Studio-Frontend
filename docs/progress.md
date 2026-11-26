@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F3.2-T1 远端验证通过（feature/f3.2-ci，T1待验收）
+
+- 提交f2d274a的[GitHub Actions运行45873425074](https://github.com/Mingan-X/Resume-Studio-Frontend/actions/runs/45873425074)实际success：冻结安装、typecheck、Lint、单元/组件、build、Chromium安装、MSW E2E全部通过。此任务完成实现和验证，按no-ff合并develop并推送。
+- 本次仅交付提前CI；F3.2阶段保持进行中，T2–T8尚未执行，不能把整个阶段标待验收。下一阶段F1.2从develop创建分支。
+
 ## 2026-11-27 F3.2-T1 CI配置（feature/f3.2-ci，进行中）
 
 - F1.1已通过no-ff合并develop（9a214b8）并推送develop及阶段分支（798bc6a），本地已合并分支按约定清理。
