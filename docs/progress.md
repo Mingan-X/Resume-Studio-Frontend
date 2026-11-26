@@ -8,6 +8,18 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F3.2-T1 远端验证通过（feature/f3.2-ci，T1待验收）
+
+- 提交f2d274a的[GitHub Actions运行45873425074](https://github.com/Mingan-X/Resume-Studio-Frontend/actions/runs/45873425074)实际success：冻结安装、typecheck、Lint、单元/组件、build、Chromium安装、MSW E2E全部通过。此任务完成实现和验证，按no-ff合并develop并推送。
+- 本次仅交付提前CI；F3.2阶段保持进行中，T2–T8尚未执行，不能把整个阶段标待验收。下一阶段F1.2从develop创建分支。
+
+## 2026-11-27 F3.2-T1 CI配置（feature/f3.2-ci，进行中）
+
+- F1.1已通过no-ff合并develop（9a214b8）并推送develop及阶段分支（798bc6a），本地已合并分支按约定清理。
+- CI仅提前执行T1，F3.2其余任务尚未开始，阶段状态进行中。后端fetch已成功（origin/develop 01d9a36）；本任务按路线图仅依赖F1.1，不要求S3.3。
+- GitHub Actions使用Node 24.22.3、pnpm 12.23.0、冻结安装、typecheck、Lint、test、build及MSW组E2E；最小contents:read权限，不部署。Actions固定提交：checkout v7.0.1（GitHub API核对）、setup-node v7.1.0（git ls-remote核对）、pnpm/action-setup v6.1.1（API解析annotated tag核对）。
+- GitHub CLI本机未安装，远端记录经官方GitHub REST读取。GitHub连接偶发TLS EOF，保留校验并有限重试，未关闭证书校验。远端运行待推送后记录，不先宣称通过。
+
 ## 2026-11-27 F1.1-T6 文档与阶段交付（feature/f1.1-project-setup，待验收）
 
 - README、架构当前状态、API对接、部署、测试与ADR同步到实际已实现范围；路线图F1.1改为待验收。T1–T6按任务提交，随后按CONTRIBUTING以no-ff集成develop。
