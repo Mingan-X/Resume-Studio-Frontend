@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.2-T3 HTTP客户端（feature/f1.2-app-shell）
+
+- shared/api统一fetch、同源地址、15秒超时、取消、Zod响应校验、AppError与requestId；健康查询迁移至共享层。HTTP错误只展示契约安全message，非法JSON/HTML不透出。
+- 最多2次指数退避；仅retryable错误重试，变更必须带Idempotency-Key，重试保留键/正文，取消及契约错误不重试；Vue Query该查询关闭额外重试以免叠加。
+- typecheck、Lint、单元/组件28项、build、MSW E2E5项通过。测试覆盖后端错误、网络、超时、Schema不符、用户取消/退避取消、未知字段及无幂等键变更；shared/api行覆盖率96.22%。真实冒烟本项未重复执行，阶段回归再验证。
+
 ## 2026-11-27 F1.2-T2 路由与输入守卫（feature/f1.2-app-shell）
 
 - 路由级懒加载、404、UUID参数Zod校验与开发期放行守卫；非法ID在加载feature前进入404。redirect只允许站内绝对路径，拒绝外站、协议相对地址、反斜杠、控制字符与嵌套编码。
