@@ -4,7 +4,7 @@
 
 ## 1. 当前可对接的接口
 
-截至2026-11-24，后端只实现了 `GET /health` 和统一错误响应。其他接口在后端对应阶段交付后才可对接，阶段对照见[路线图](development-roadmap.md#1-阶段总览)。
+F1.1已对接 `GET /health`，使用后端src/contracts/http.ts定义的临时Zod Schema并实测成功/服务停止。后端已提供任务查询/取消与OpenAPI，前端在F1.3同步快照后接入；其他业务接口须在对应后端阶段合并后消费，阶段对照见[路线图](development-roadmap.md#1-阶段总览)。
 
 ## 2. 契约同步
 

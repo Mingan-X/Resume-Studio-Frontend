@@ -1,6 +1,6 @@
 # 前端架构
 
-状态：仓库尚无代码，本文是F1.1起所有实现必须遵守的目标结构。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
+状态：F1.1已建立入口、健康状态feature与工程检查，其余目录和路由仍是后续阶段目标。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
 
 ## 1. 职责边界
 

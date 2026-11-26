@@ -1,12 +1,14 @@
 # 构建与部署
 
-状态：尚无构建配置。本地开发与构建在F1.1建立，生产部署配置在F3.2完成；生产部署形态取决于后端决策D10。
+状态：F1.1已验证本地构建、同源代理与健康接口；生产配置和目标环境尚未验证。D10已确定单机Docker Compose，具体生产部署配置在F3.2完成。
 
 ## 1. 环境
 
 - Node.js 24.22.3、pnpm 12.x，与后端一致；`.node-version` 与 `package.json` 的 `engines` 在F1.1写入。
 - `.npmrc` 与后端相同：`engine-strict=true`、`strict-peer-dependencies=true`、`save-exact=true`、`registry=https://registry.npmjs.org/`。
 - 安装一律使用 `pnpm install --frozen-lockfile`。
+
+已验证pnpm 12.23.0。首次安装锁文件由F1.1建立；workspace仅批准vue-demi的版本切换脚本，保留供应链校验。浏览器安装命令见[测试](testing.md)。`pnpm run dev`用于本地代理联调，`pnpm run preview`只预览静态产物。运行E2E前关闭本项目手动启动的Vite实例，以免项目锁冲突。
 
 ## 2. 构建配置
 

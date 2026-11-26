@@ -1,16 +1,17 @@
 # 测试与验证
 
-状态：F1.1已建立Vitest、Vue Test Utils与Playwright基础配置，健康接口测试由F1.1-T5补齐。本文规定测试分层、命令与覆盖要求。
+状态：F1.1已建立Vitest、Vue Test Utils、MSW与Playwright，健康接口已覆盖成功、网络失败、异常响应及真实后端代理。实际结果见[进度](progress.md)。本文规定后续测试分层、命令与覆盖要求。
 
 首次在本机执行 `pnpm exec playwright install chromium` 下载浏览器；Linux CI使用 `pnpm exec playwright install --with-deps chromium`。浏览器保存在用户缓存中，不提交到仓库。`test:e2e`运行离线界面组，`test:smoke`运行真实后端组（后端不运行时失败）；两组均使用独立Vite端口4173，不复用不明来源服务器。失败保留trace与HTML报告，使用合成数据。
 
-## 1. 命令（F1.1建立后）
+## 1. 命令
 
 ```powershell
 pnpm run typecheck   # vue-tsc --noEmit
 pnpm run lint        # eslint . --max-warnings=0，并检查 prettier 格式
 pnpm test            # vitest run
 pnpm run test:e2e    # playwright test
+pnpm run test:smoke  # 连接真实后端
 pnpm run build       # 生产构建
 ```
 

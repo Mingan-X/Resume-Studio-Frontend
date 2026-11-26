@@ -8,6 +8,13 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.1-T6 文档与阶段交付（feature/f1.1-project-setup，待验收）
+
+- README、架构当前状态、API对接、部署、测试与ADR同步到实际已实现范围；路线图F1.1改为待验收。T1–T6按任务提交，随后按CONTRIBUTING以no-ff集成develop。
+- 本地文档目标44处全部存在，链接/标题结构人工核对，git diff --check通过；基础检查全部通过（单元/组件8项），MSW E2E 2项通过。真实后端冒烟在T5通过，此次纯文档修改不重复启动后端。
+- 前端fetch首次出现GitHub TLS握手失败，重试成功，origin/develop仍为0e812619bb796569c3a2300758fe467e97862d85，无上游新提交。远端CI尚未配置，下一任务F3.2-T1；生产发布与业务联调均未执行，不属于本阶段。
+- 后端fetch成功，origin/develop为01d9a36，S2.1尚未合并；工作区有其他工作产生的S2.1改动，未触碰。提前CI仅依赖F1.1，按明确执行顺序继续；F2.1开始前会重新核对后端S2.1门禁。
+
 ## 2026-11-27 F1.1-T5 健康状态与代理（feature/f1.1-project-setup）
 
 - `/api`、`/health`同源代理；features/system查询健康状态并用Zod校验，临时Schema注明后端src/contracts/http.ts，F1.3替换。Vue Query管理状态，纯文本错误与重试，状态变化aria-live。公开环境配置经Zod验证，生产禁止mock且不包含MSW worker。
