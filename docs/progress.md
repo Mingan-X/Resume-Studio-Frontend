@@ -8,6 +8,13 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.3-T3 任务进度页（feature/f1.3-contract-tasks）
+
+- `/tasks/:taskId`消费生成契约，显示状态、真实阶段/计数、尝试次数、重试时间及失败安全信息；requestId来自经UUID校验的响应头，reportId为空不显示报告入口。不估算百分比。
+- 2秒轮询，SUCCEEDED/PARTIAL/FAILED/CANCELLED全部停止；页面隐藏取消当前查询并暂停，可见后恢复；错误由共享客户端有限重试，失败后停止定时轮询。非法参数在入口拒绝。
+- typecheck、Lint、单元/组件/契约64项、build、MSW E2E9项通过；各终态与隐藏暂停实测检查请求次数，刷新恢复重试状态。新增冒烟脚本Node全局Lint声明后检查通过，未禁用规则。
+- `pnpm run test:smoke:tasks`真实HTTP组2项通过（health与合成任务终态/1:1计数/刷新）。脚本使用后端已有dist、真实数据库/控制器/服务，测试IdentityPort只绑定本轮随机owner；先核验项目容器/端口/卷，最后仅清理本轮owner及关联记录并核对0残留。未修改后端文件、迁移、配置或Docker，也未运行模型。通用`test:smoke`保留仅health，任务冒烟使用独立命令。
+
 ## 2026-11-27 F1.3-T2 契约夹具检查（feature/f1.3-contract-tasks）
 
 - health、任务排队/重试/四终态、取消响应夹具按生成类型声明并逐一经生成Zod校验；编译期类型等价断言保证Schema输出与生成类型一致。新增test:contract命令。

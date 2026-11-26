@@ -10,7 +10,6 @@ export function createApplicationRouter() {
     { path: '/jobs/new', title: '新建岗位' },
     { path: '/jobs/:jobId', title: '岗位详情' },
     { path: '/analyses/new', title: '发起分析' },
-    { path: '/tasks/:taskId', title: '任务进度' },
     { path: '/reports', title: '报告历史' },
     { path: '/reports/:reportId', title: '报告详情' },
     { path: '/login', title: '登录' },
@@ -19,6 +18,11 @@ export function createApplicationRouter() {
     history: createWebHistory(),
     routes: [
       { path: '/', redirect: '/resumes' },
+      {
+        path: '/tasks/:taskId',
+        component: () => import('@/pages/TaskPage.vue'),
+        meta: { title: '任务进度' },
+      },
       ...pages.map(({ path, title }) => ({
         path,
         component: () => import('@/pages/DevelopmentPage.vue'),
