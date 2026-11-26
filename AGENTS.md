@@ -13,7 +13,7 @@
 
 ## 与后端的边界
 
-- 接口契约的唯一来源是后端仓库（Resume-Studio-Backend，远程 `Mingan-X/Resume-Studio`）的 `src/contracts/`、docs/api-contract.md 与 docs/api.md。前端只消费 `contracts/openapi.json` 快照生成的类型。
+- 接口契约的唯一来源是后端仓库（Resume-Studio-Backend，远程 `Mingan-X/Resume-Studio-Backend`）的 `src/contracts/`、docs/api-contract.md 与 docs/api.md。前端只消费 `contracts/openapi.json` 快照生成的类型。
 - 发现后端契约缺失、矛盾或不便使用时，记录问题并请维护者在后端排期，不在前端绕过（例如自行拼装字段或解析message）。
 - 前端不计算、取整、排序或补全分数、排名、覆盖率和资格判断，一律展示后端结果。
 - 不把未联调的mock描述为已完成功能。
