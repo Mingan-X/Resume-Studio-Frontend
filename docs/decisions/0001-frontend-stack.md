@@ -35,6 +35,10 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 
 ## 方案比较
 
+### F1.1-T4 实际安装（2026-11-27）
+
+@playwright/test 1.65.1，registry engines为Node >=20，兼容本机；已读取官方包README并按其文档安装Chromium。沿用已选E2E框架（替代Cypress），成本是浏览器缓存和CI下载，仅开发期依赖；真实页面打开已验证。[官方文档](https://playwright.dev/docs/intro)。
+
 ### F1.1-T3 实际安装（2026-11-27）
 
 Vitest / @vitest/coverage-v8 5.1.2、@vue/test-utils 2.6.0、happy-dom 21.0.4。已复核registry版本/engines/peers（Vitest要求Node 22.12/24/26，Vite 6.4/7/8，coverage严格同版本；Vue Test Utils要求Vue 3）。沿用ADR选型，不改用Jest或jsdom；这些包只影响开发和CI安装。使用官方API：[Vitest配置](https://vitest.dev/config/)、[Vue Test Utils](https://test-utils.vuejs.org/guide/)。冻结安装与实际组件运行已通过。

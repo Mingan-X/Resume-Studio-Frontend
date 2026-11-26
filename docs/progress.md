@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.1-T4 E2E框架（feature/f1.1-project-setup）
+
+- 建立Playwright Chromium配置、离线ui/真实real两组、独立Vite端口、首页可见性用例与安装说明；浏览器缓存、trace和报告不入库。
+- 冻结安装、Lint、单元测试1项、E2E首页1项通过。初次typecheck/build因exactOptionalPropertyTypes拒绝`workers: undefined`失败，改为明确的2个worker后复查。
+- 真实后端组尚无用例，未执行（T5交付）；下载Chromium 159及headless shell成功。环境同时设置NO_COLOR/FORCE_COLOR产生Node提示，不影响测试。
+
 ## 2026-11-27 F1.1-T3 单元与组件测试（feature/f1.1-project-setup）
 
 - 建立Vitest + Vue Test Utils + happy-dom，首页可见名称/用途组件测试；`pnpm test`默认生成HTML及JSON覆盖率报告（不提交），shared与feature model行覆盖率门槛80%。当前尚无这两类模块，不把全局50%误记为80%。
