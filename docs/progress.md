@@ -8,6 +8,14 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.1-T1 项目初始化（feature/f1.1-project-setup，进行中）
+
+- 建立Vue入口、Vite配置、严格TS配置、精确依赖、Node版本与忽略规则。阶段状态为进行中。
+- 重新核对npm registry版本、engines/peers；使用Vue 3.5.46、Vite 8.4.0、plugin-vue 6.0.11、TypeScript 6.0.3、vue-tsc 3.3.14、@vue/tsconfig 0.9.1、@types/node 24.19.4。版本依据与成本见ADR追加记录。
+- Node 24.22.3 / pnpm 12.23.0：首次安装、`pnpm install --frozen-lockfile`、`pnpm run build`通过；产出dist（不提交），首屏JS gzip 24.74 kB。
+- registry下载有慢速警告；Vite/TypeScript官网读取出现TLS错误，改读官方包内README与@vue/tsconfig文档；Vue官网可访问。无忽略peer或engines校验。
+- typecheck独立命令、Lint、单元测试和E2E尚未建立，分别由T2/T3/T4交付，未执行；真实冒烟待T5。
+
 ## 2026-11-27 决策确认与develop集成分支流程
 
 - 维护者确认全部决策并授权AI连续完成F1.1至F3.2：FD1采用GitHub Actions并在F1.1完成后提前执行F3.2-T1；FD2首版不引入生产错误监控；后端D9（本地账号+会话+CSRF）与D10（单机Docker Compose）已确定。路线图任务依赖、FD表与阶段总览同步更新。

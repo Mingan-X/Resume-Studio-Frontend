@@ -35,6 +35,17 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 
 ## 方案比较
 
+### F1.1-T1 实际安装（2026-11-27）
+
+| 包 | 版本 | 用途与核对 |
+|---|---|---|
+| vue | 3.5.46 | 已选框架；官方Quick Start与registry核对 |
+| vite / @vitejs/plugin-vue | 8.4.0 / 6.0.11 | 开发服务器与Vue编译；替代手工打包配置，新增开发依赖成本；Node范围兼容24.22.3，plugin支持Vite 8 |
+| typescript / vue-tsc | 6.0.3 / 3.3.14 | TS与SFC检查；只用tsc不能检查Vue模板，vue-tsc要求TS >=5 |
+| @vue/tsconfig / @types/node | 0.9.1 / 24.19.4 | 官方严格基础配置与构建配置的Node类型，均为开发依赖 |
+
+已读取官方包内README（Vite、vue-tsc、@vue/tsconfig）并核对registry发布版本、engines/peers。官方入口：[Vue](https://vuejs.org/guide/quick-start.html)、[Vite](https://vite.dev/guide/)、[Vue TS配置](https://github.com/vuejs/tsconfig)。当前版本均仍有发布维护；精确版本与锁文件冻结安装已验证。pnpm自动记录的 `vite@8.4.0` release-age例外随workspace配置提交，不关闭全局供应链或peer校验。
+
 | 方案 | 结论与原因 |
 |---|---|
 | React + TypeScript | 生态同样成熟。选择Vue的原因：国内企业后台组件库（Element Plus）成熟，参考项目Elpis Demo的报告界面也是Vue，便于对照业务设计 |
