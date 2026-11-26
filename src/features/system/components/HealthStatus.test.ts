@@ -24,14 +24,14 @@ describe('健康状态', () => {
   it('网络失败给出重试入口，恢复后可重新检查', async () => {
     server.use(http.get('*/health', () => HttpResponse.error()));
     const wrapper = render();
-    await expect.poll(() => wrapper.text()).toContain('网络连接失败');
+    await expect.poll(() => wrapper.text(), { timeout: 4000 }).toContain('网络连接失败');
     server.resetHandlers();
     await wrapper.get('button').trigger('click');
     await expect.poll(() => wrapper.text()).toContain('已连接');
     wrapper.unmount();
   });
   it.each([
-    ['服务失败', () => new HttpResponse(null, { status: 503 }), '网络或服务暂不可用'],
+    ['服务失败', () => new HttpResponse(null, { status: 503 }), '服务暂不可用'],
     ['错误结构', () => HttpResponse.json({ status: 'ok' }), '服务响应格式异常'],
     ['非法JSON', () => new HttpResponse('bad json'), '服务响应格式异常'],
   ])('%s明确提示', async (_name, response, expected) => {

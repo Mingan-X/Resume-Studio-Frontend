@@ -1,6 +1,6 @@
 # 前端架构
 
-状态：F1.1已建立入口、健康状态feature与工程检查，其余目录和路由仍是后续阶段目标。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
+状态：F1.1/F1.2已建立装配、布局、路由及输入守卫、共享HTTP/上传/SSE基础、通用状态与健康检查；业务页面仍为占位。下文任务轮询、业务接口和认证由后续阶段交付。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
 
 ## 1. 职责边界
 
@@ -127,6 +127,8 @@ features/<领域>/
 - 展示文案使用后端 `message`；网络与契约错误使用前端固定文案。任何错误界面都显示可复制的requestId（若存在）。
 - 只对 `retryable: true` 与网络错误自动重试，最多2次，指数退避；变更请求（POST等）只在携带Idempotency-Key时才自动重试。
 - 全局 `app.config.errorHandler` 与 `window` 未处理的Promise拒绝统一进入错误上报函数。首版只输出到开发控制台；生产错误监控需单独决策（FD2），不得上报简历内容或证据原文。
+
+F1.2实现：HTTP层承担最多两次重试，Vue Query关闭同一请求的额外重试；超时为network/TIMEOUT，主动取消为aborted。错误组件复制requestId失败时保留可选择文本。FD2已确定首版不引入生产监控，开发日志仅kind/requestId，不输出message/原异常/组件上下文；生产不输出或发送错误。
 
 ## 8. 任务进度
 

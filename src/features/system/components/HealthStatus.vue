@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ErrorNotice from '@/shared/ui/ErrorNotice.vue';
+
 import { useHealth } from '../api/useHealth';
 
 const { data, error, isPending, isFetching, refetch } = useHealth();
@@ -11,9 +13,7 @@ const { data, error, isPending, isFetching, refetch } = useHealth();
       <button type="button" :disabled="isFetching" @click="refetch()">重新检查</button>
     </div>
     <p v-if="isPending" role="status">正在检查服务连接…</p>
-    <div v-else-if="error" role="alert">
-      <p class="error">{{ error.message }}</p>
-    </div>
+    <ErrorNotice v-else-if="error" :error="error" @retry="refetch()" />
     <dl v-else-if="data">
       <div>
         <dt>状态</dt>

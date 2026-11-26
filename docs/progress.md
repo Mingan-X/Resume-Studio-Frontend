@@ -8,6 +8,44 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.2-T6 文档与阶段回归（feature/f1.2-app-shell，待验收）
+
+- README、架构和API/测试文档更新至实际边界，路线图F1.2待验收；T1–T6分别提交。共享层已可复用，所有业务页仍为占位，未描述为完成。
+- 基础检查45项单元/组件及7项E2E通过（T5最终代码）；本任务真实后端健康冒烟1项通过，44处本地文档链接及git diff --check通过。内置浏览器检查顶栏/侧栏/内容布局，点击岗位导航后状态正确且截图无重叠。
+- Git fetch多次出现OpenSSL握手失败，单次命令指定Windows schannel后成功，未改Git全局配置或关闭证书校验。远端develop无新提交。CI待推送后查实际结果。
+- 真实上传业务与SSE接口未接入，后续F2.1/F2.5验证；生产部署未执行。只关闭本次启动的API和dev进程，未改后端文件/数据库或Docker服务。
+
+## 2026-11-27 F1.2-T5 上传与SSE基础（feature/f1.2-app-shell）
+
+- XHR multipart上传支持真实字节进度、幂等键、取消、超时、错误标准化与Schema校验；不设置multipart边界，不在取消后重试。SSE保留原生EventSource重连，连续失败/重连期限/不可用时关闭并回退；校验消息，停止后不再交付。
+- typecheck、Lint、单元/组件45项、build、E2E7项通过；浏览器真实XHR向仅e2e模式启用的本地传输服务器发送2MiB合成文件，验证进度、取消及413转换。该服务器不是后端业务接口，未伪造未合并的业务契约。
+- SSE假EventSource测试覆盖断线重连、达到上限、期限耗尽、主动停止、非法JSON/Schema、不支持的环境。shared/api行覆盖率96.99%，SSE100%、上传95.12%。真实业务SSE尚无接口，未执行，留待F2.5；真实文件上传业务留待F2.1。
+
+## 2026-11-27 F1.2-T4 全局错误与通用状态（feature/f1.2-app-shell）
+
+- 新增加载/空/错误/正常内容组件、错误requestId展示与复制、复制失败提示和重试事件；健康页采用共享错误提示。全局Vue异常/未处理Promise只记录kind/requestId到开发控制台，未知异常转固定文案，不输出用户内容或堆栈；卸载移除监听。
+- typecheck、Lint、单元/组件32项、build、MSW E2E5项通过；共享UI行覆盖率100%。组件覆盖四种状态、复制成功/失败、404统一文案；全局异常测试确认不输出合成私密字符串。
+- 首次两次typecheck失败于Vue的unknown默认值限制，改为保留缺省undefined语义后通过；未修改严格选项。真实后端冒烟留待阶段回归。
+
+## 2026-11-27 F1.2-T3 HTTP客户端（feature/f1.2-app-shell）
+
+- shared/api统一fetch、同源地址、15秒超时、取消、Zod响应校验、AppError与requestId；健康查询迁移至共享层。HTTP错误只展示契约安全message，非法JSON/HTML不透出。
+- 最多2次指数退避；仅retryable错误重试，变更必须带Idempotency-Key，重试保留键/正文，取消及契约错误不重试；Vue Query该查询关闭额外重试以免叠加。
+- typecheck、Lint、单元/组件28项、build、MSW E2E5项通过。测试覆盖后端错误、网络、超时、Schema不符、用户取消/退避取消、未知字段及无幂等键变更；shared/api行覆盖率96.22%。真实冒烟本项未重复执行，阶段回归再验证。
+
+## 2026-11-27 F1.2-T2 路由与输入守卫（feature/f1.2-app-shell）
+
+- 路由级懒加载、404、UUID参数Zod校验与开发期放行守卫；非法ID在加载feature前进入404。redirect只允许站内绝对路径，拒绝外站、协议相对地址、反斜杠、控制字符与嵌套编码。
+- typecheck、Lint、单元/组件19项、build、MSW E2E 5项通过；E2E覆盖所有资源非法ID无请求、未知路由和redirect清理。shared路由工具行覆盖率84.61%，门槛通过。
+- 首次Lint拒绝控制字符正则，改用字符码校验后通过，未禁用规则。真实冒烟未运行（本任务仅路由输入）；认证尚未实现，登录页仍占位。
+
+## 2026-11-27 F1.2-T1 应用布局（feature/f1.2-app-shell，进行中）
+
+- F3.2-T1已合并并推送develop（1f68152），develop远端运行45873601513亦success；推送一次TLS失败后有限重试成功。
+- 装配Vue Query/Pinia/Element Plus与Router，顶栏、主导航、内容区、跳到内容链接；业务页面明确显示功能开发中且不请求业务接口。健康检查点击后才展开。主题变量集中管理，Element Plus显式按需导入。
+- registry/官方包README与peer核对、冻结安装、typecheck、Lint、单元/组件8项、build、MSW E2E 3项通过（含键盘导航与无业务请求）。最初全量UI注册首屏gzip 364.16 kB，改为按需注册后83.50 kB，无大chunk警告。
+- 真实后端冒烟本任务未重复运行（接口未变化，T5已有记录）；生产部署未执行。
+
 ## 2026-11-27 F3.2-T1 远端验证通过（feature/f3.2-ci，T1待验收）
 
 - 提交f2d274a的[GitHub Actions运行45873425074](https://github.com/Mingan-X/Resume-Studio-Frontend/actions/runs/45873425074)实际success：冻结安装、typecheck、Lint、单元/组件、build、Chromium安装、MSW E2E全部通过。此任务完成实现和验证，按no-ff合并develop并推送。

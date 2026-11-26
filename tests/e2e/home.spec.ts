@@ -3,12 +3,15 @@ import { expect, test } from '@playwright/test';
 test('首页可打开', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Resume Studio');
-  await expect(page.getByRole('heading', { name: 'Resume Studio' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '简历', exact: true })).toBeVisible();
+  await expect(page.getByText('功能开发中')).toBeVisible();
+  await page.getByRole('button', { name: '检查服务连接' }).click();
   await expect(page.getByText('已连接（ok）')).toBeVisible();
 });
 
 test('网络中断显示错误且可重试', async ({ page }) => {
-  await page.goto('/?scenario=offline');
+  await page.goto('/resumes?scenario=offline');
+  await page.getByRole('button', { name: '检查服务连接' }).click();
   await expect(page.getByRole('alert')).toContainText('网络连接失败');
   await expect(page.getByRole('button', { name: '重新检查' })).toBeEnabled();
 });
