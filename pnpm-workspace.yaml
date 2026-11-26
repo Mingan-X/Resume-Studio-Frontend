@@ -1,2 +1,5 @@
+allowBuilds:
+  vue-demi: true
 minimumReleaseAgeExclude:
   - vite@8.4.0
+  - msw@3.0.8

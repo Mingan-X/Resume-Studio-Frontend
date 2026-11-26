@@ -4,10 +4,13 @@ import { defineConfig } from 'vitest/config';
 import viteConfig from './vite.config.ts';
 
 export default mergeConfig(
-  viteConfig,
+  viteConfig({ command: 'serve', mode: 'test' }),
   defineConfig({
     test: {
       environment: 'happy-dom',
+      maxWorkers: 2,
+      setupFiles: ['tests/mocks/setup.ts'],
+      environmentOptions: { happyDOM: { url: 'http://localhost:3000' } },
       include: ['src/**/*.test.ts', 'tests/contract/**/*.test.ts'],
       clearMocks: true,
       restoreMocks: true,

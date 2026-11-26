@@ -1,0 +1,44 @@
+:root {
+  font-family: 'Microsoft YaHei UI', 'PingFang SC', sans-serif;
+  color: var(--text);
+  background: var(--background);
+  font-synthesis: none;
+  font-variant-numeric: tabular-nums;
+  --background: #f3f6fa;
+  --surface: #ffffff;
+  --text: #203044;
+  --text-muted: #52647a;
+  --brand: #2358a5;
+  --border: #ccd6e2;
+  --success: #207349;
+  --danger: #b32d34;
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius: 0.5rem;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  line-height: 1.6;
+}
+button {
+  font: inherit;
+  color: var(--brand);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}

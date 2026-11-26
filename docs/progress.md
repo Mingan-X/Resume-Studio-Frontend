@@ -8,6 +8,15 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.1-T5 健康状态与代理（feature/f1.1-project-setup）
+
+- `/api`、`/health`同源代理；features/system查询健康状态并用Zod校验，临时Schema注明后端src/contracts/http.ts，F1.3替换。Vue Query管理状态，纯文本错误与重试，状态变化aria-live。公开环境配置经Zod验证，生产禁止mock且不包含MSW worker。
+- 基础检查通过：typecheck、Lint、单元/组件8项、build；shared/config与system/model行覆盖率各100%。MSW E2E 2项、真实后端冒烟1项通过；生产mock开启的负向构建按预期失败，正常构建通过（JS gzip 59.42 kB）。
+- 真实冒烟使用后端既有dist/src/main-api.js，APP_ENV=development、loopback:3000、TASK_API_ENABLED=false；未修改后端文件、数据库或Docker。验证后只停止本次启动的API。API停止后内置浏览器明确显示网络/服务错误与重试，且pnpm test仍8项通过。
+- 失败与修复：vue-demi安装脚本被pnpm拒绝，审阅仅在包内选择Vue版本的脚本后精确批准；MSW 3将onUnhandledRequest改名为onUnhandledFrame，类型检查首次失败后修正。E2E首次因本次视觉检查的Vite实例占用项目锁而失败，关闭该实例后通过；未绕过锁。模拟网络/503测试产生预期stderr，断言通过。
+- 内置浏览器缺少官方版本文件：按修复技能恢复159个官方文件并校验，不改config。首次连接/页面加载超时，随后实际健康页导航、点击重试、状态读回与截图成功；不宣称未来升级自动修复。
+- 视觉采用现有界面规范的浅灰蓝工作台、深蓝文字与绿色连接状态，颜色/间距集中tokens.css，无业务未实现页面冒充完成。
+
 ## 2026-11-27 F1.1-T4 E2E框架（feature/f1.1-project-setup）
 
 - 建立Playwright Chromium配置、离线ui/真实real两组、独立Vite端口、首页可见性用例与安装说明；浏览器缓存、trace和报告不入库。

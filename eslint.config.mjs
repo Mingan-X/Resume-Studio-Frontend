@@ -14,6 +14,7 @@ export default defineConfigWithVueTs(
       'src/generated/**',
       'playwright-report/**',
       'test-results/**',
+      'tests/mocks/public/**',
     ],
   },
   js.configs.recommended,

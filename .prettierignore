@@ -6,5 +6,6 @@ test-results
 src/generated
 pnpm-lock.yaml
 contracts/openapi.json
+tests/mocks/public
 docs
 *.md

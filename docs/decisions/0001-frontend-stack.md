@@ -35,6 +35,10 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 
 ## 方案比较
 
+### F1.1-T5 实际安装（2026-11-27）
+
+Zod 4.6.7、@tanstack/vue-query 5.108.4、MSW 3.0.8。registry版本/engines/peers复核，Vue Query支持Vue 3.3+，MSW要求Node >=22.12。复用已选运行时校验和服务端缓存方案，替代手工断言/状态管理；MSW仅开发期，采用官方README及包类型注明的onUnhandledFrame选项。已检查vue-demi 0.14.10 postinstall及utils，仅切换包内Vue适配文件，allowBuilds精确批准；无全局允许脚本。MSW worker与官方文件SHA256一致且只在mock开发服务器提供，不复制进dist。官方入口：[Vue Query](https://tanstack.com/query/latest/docs/framework/vue/overview)、[MSW](https://mswjs.io/docs)、[Zod](https://zod.dev/)。冻结安装、组件和真实后端验证通过。
+
 ### F1.1-T4 实际安装（2026-11-27）
 
 @playwright/test 1.65.1，registry engines为Node >=20，兼容本机；已读取官方包README并按其文档安装Chromium。沿用已选E2E框架（替代Cypress），成本是浏览器缓存和CI下载，仅开发期依赖；真实页面打开已验证。[官方文档](https://playwright.dev/docs/intro)。

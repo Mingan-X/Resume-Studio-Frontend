@@ -1,3 +1,3 @@
-import { createApplication } from './app/createApplication';
+import { mountApplication } from './app/createApplication';
 
-createApplication().mount('#app');
+void mountApplication();

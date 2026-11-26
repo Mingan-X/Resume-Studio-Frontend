@@ -19,5 +19,6 @@ export default defineConfig({
     command: 'pnpm run dev --port 4173 --strictPort',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
+    env: { VITE_ENABLE_MOCKS: process.argv.includes('--project=real') ? 'false' : 'true' },
   },
 });
