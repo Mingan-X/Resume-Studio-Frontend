@@ -4,21 +4,18 @@
 
 ## 1. 当前可对接的接口
 
-F1.1已对接 `GET /health`，使用后端src/contracts/http.ts定义的临时Zod Schema并实测成功/服务停止。后端已提供任务查询/取消与OpenAPI，前端在F1.3同步快照后接入；其他业务接口须在对应后端阶段合并后消费，阶段对照见[路线图](development-roadmap.md#1-阶段总览)。
+F1.3已对接 `GET /health`、`GET /api/v1/tasks/:taskId`、`POST /api/v1/tasks/:taskId/cancel`，全部消费生成契约。任务使用本地开发身份，已通过真实合成任务联调，不代表生产认证或分析业务完成。来源SHA见[SOURCE](../contracts/SOURCE.md)，其他业务接口须在对应后端阶段合并后消费。
 
 ## 2. 契约同步
 
 后端S1.4-T9交付OpenAPI产物后执行以下流程：
 
 1. 把后端产物复制到 `contracts/openapi.json`，在 `contracts/SOURCE.md` 记录后端提交SHA、产物路径和复制日期。
-2. 运行生成命令（F1.3建立，计划为 `pnpm run api:generate`），用 @hey-api/openapi-ts 生成类型与Zod Schema到 `src/generated/`。该目录不提交，`build`、`typecheck` 和 `test` 前自动生成。生成器的Zod插件输出是否满足需求在F1.3实测；不满足时改为生成类型后在 `features/*/model/` 手写Schema，并用类型测试保证两者一致。
+2. 运行 `pnpm run api:generate`，用 @hey-api/openapi-ts 的typescript/zod插件生成到 `src/generated/`。目录不提交，`dev`、`build`、`typecheck` 和 `test` 前自动生成。F1.3实测生成Zod4 Schema满足当前契约，使用默认z.object忽略未知字段；类型等价与坏夹具拒绝由契约测试保证。
 3. 运行类型检查。字段变化导致的编译错误逐一修复，不用类型断言绕过。
 4. 快照更新单独提交，提交说明写明后端SHA。
 
-OpenAPI产物可用之前：
-
-- 只对接 `/health`，其响应类型在 `features/system/model/` 中按后端 `src/contracts/http.ts` 手写，并注明来源文件。
-- 不为尚未在后端合并的接口手写类型或字段。
+F1.3已删除health临时手写定义。不得为尚未在后端合并的接口手写类型或字段。错误code字段对未知字符串保持兼容，其余结构来源于生成Schema。
 
 ## 3. HTTP客户端
 
@@ -33,14 +30,14 @@ F1.2已实现本节客户端核心、XHR上传与EventSource基础封装。healt
 - 从响应头读取 `x-request-id` 并附在 `AppError` 上。
 - S3.2之后为非GET请求附加CSRF头（具体名称以后端实现为准）。
 
-feature中的调用方式（示意，以生成结果为准）：
+feature中的调用方式（示意，实际实现另处理响应头与可见性）：
 
 ```ts
 // features/tasks/api/useTask.ts
 export function useTask(taskId: MaybeRefOrGetter<string>) {
   return useQuery({
     queryKey: computed(() => taskKeys.detail(toValue(taskId))),
-    queryFn: ({ signal }) => apiGet(`/tasks/${encodeURIComponent(toValue(taskId))}`, taskSchema, { signal }),
+    queryFn: ({ signal }) => apiRequest(`/tasks/${encodeURIComponent(toValue(taskId))}`, taskSchema, { signal }),
     refetchInterval: (query) => (isTerminal(query.state.data?.status) ? false : 2000),
     refetchIntervalInBackground: false,
   });
@@ -65,6 +62,8 @@ export function useTask(taskId: MaybeRefOrGetter<string>) {
 规划中的错误码名称以后端实现时的 `src/contracts/` 为准，前端在对接时同步更新本表。
 
 ## 5. 幂等键
+
+任务取消是后端已实现的可重复操作，不要求Idempotency-Key；前端不自动重试取消，用户可再次确认。202不表示已取消，最终状态由GET确定。
 
 - 创建任务类请求（发起分析、调权重算、触发索引等）必须带 `Idempotency-Key`。
 - 用户点击提交时用 `crypto.randomUUID()` 生成，保存在该表单的组件状态中；网络失败或超时后的重试复用同一键；用户修改输入后生成新键。

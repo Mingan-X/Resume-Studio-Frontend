@@ -1,4 +1,4 @@
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import { AppError, contractError, httpError, transportError } from './errors';
 
@@ -9,6 +9,7 @@ export interface RequestOptions {
   idempotencyKey?: string;
   timeoutMs?: number;
   retries?: number;
+  onRequestId?: (requestId: string | undefined) => void;
 }
 export function apiUrl(path: string): string {
   if (path === '/health') return path;
@@ -64,7 +65,12 @@ export async function apiRequest<T>(
         headers,
         ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
       });
-      const requestId = response.headers.get('x-request-id');
+      const requestId = z
+        .uuid()
+        .optional()
+        .catch(undefined)
+        .parse(response.headers.get('x-request-id'));
+      options.onRequestId?.(requestId);
       const body: unknown = await response.json().catch(() => null);
       if (signal.aborted) throw transportError(timeout.aborted, options.signal?.aborted ?? false);
       if (!response.ok) throw httpError(body, response.status, requestId);

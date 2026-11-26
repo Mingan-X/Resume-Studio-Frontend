@@ -8,6 +8,42 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-27 F1.3-T5 阶段交付与F2.1门禁（feature/f1.3-contract-tasks，待验收）
+
+- README、架构、API对接和测试文档同步生成契约、轮询/取消、真实冒烟前置及测试隔离边界；路线图F1.3待验收。复核界面规范时修正重试时间为本地时区YYYY-MM-DD HH:mm，避免locale改变分隔符，格式断言通过。
+- 最终typecheck、Lint、单元/组件/契约65项、build、MSW E2E11项通过；独立契约4项通过；真实HTTP冒烟3项及隔离清理在T4通过，最终仅时间展示/文档变化，不重复数据库冒烟。文档本地目标45处全部存在，git diff --check通过。
+- 下一阶段F2.1开始前fetch后端：两次TLS握手失败后fetch成功。origin/develop仍为01d9a36c882d5e7c0e0945b4bc7a2ed6ee11cc66，S2.1仍进行中，OpenAPI无简历路径，未合并满足F2.1的实现。按维护者停止条件，本轮交付F1.3后停止，等待后端S2.1合并；不轮询、不创建F2.1实现分支，不用mock绕过门禁。
+- F2.1至F3.2其余任务未执行（依赖门禁）；真实模型冒烟F2.3-T4/F2.4-T7/F2.5-T4/F3.2-T2及目标部署F3.2-T6仍按统一验收延后规则保留，不标完成。F3.2仅提前T1完成，阶段保持进行中。
+- F1.1、F1.2、F1.3阶段状态为待验收，main未操作；后端文件未改动，真实测试只使用已编译模块及本轮隔离数据。
+
+## 2026-11-27 F1.3-T4 取消任务（feature/f1.3-contract-tasks）
+
+- 取消前二次确认安全停止后果；请求使用生成的空对象契约，202仅提示“取消请求已提交”，最终状态继续查询。提交中/已请求取消禁用按钮；INVALID_STATE精确刷新当前任务并提示，其他失败展示安全message/requestId。
+- 最终串行typecheck、Lint、单元/组件/契约65项、build、MSW E2E11项、真实HTTP冒烟3项全部通过。真实取消验证202后仍QUEUED且cancelRequested=true，随后后端实际对账服务提交CANCELLED并查询核对；本轮隔离数据清理成功。
+- 失败记录：一次E2E终态轮询断言出现额外请求，trace显示我并行运行生成导致Vite页面重载/重连，改为完整串行后通过（未改断言）；新增组件测试首次因happy-dom无原生confirm而spy失败，显式stub原生对话框后通过。重复提交禁用及500失败保留状态/requestId有组件测试。
+- 未运行真实模型、报告及生产部署，均非本任务范围。
+
+## 2026-11-27 F1.3-T3 任务进度页（feature/f1.3-contract-tasks）
+
+- `/tasks/:taskId`消费生成契约，显示状态、真实阶段/计数、尝试次数、重试时间及失败安全信息；requestId来自经UUID校验的响应头，reportId为空不显示报告入口。不估算百分比。
+- 2秒轮询，SUCCEEDED/PARTIAL/FAILED/CANCELLED全部停止；页面隐藏取消当前查询并暂停，可见后恢复；错误由共享客户端有限重试，失败后停止定时轮询。非法参数在入口拒绝。
+- typecheck、Lint、单元/组件/契约64项、build、MSW E2E9项通过；各终态与隐藏暂停实测检查请求次数，刷新恢复重试状态。新增冒烟脚本Node全局Lint声明后检查通过，未禁用规则。
+- `pnpm run test:smoke:tasks`真实HTTP组2项通过（health与合成任务终态/1:1计数/刷新）。脚本使用后端已有dist、真实数据库/控制器/服务，测试IdentityPort只绑定本轮随机owner；先核验项目容器/端口/卷，最后仅清理本轮owner及关联记录并核对0残留。未修改后端文件、迁移、配置或Docker，也未运行模型。通用`test:smoke`保留仅health，任务冒烟使用独立命令。
+
+## 2026-11-27 F1.3-T2 契约夹具检查（feature/f1.3-contract-tasks）
+
+- health、任务排队/重试/四终态、取消响应夹具按生成类型声明并逐一经生成Zod校验；编译期类型等价断言保证Schema输出与生成类型一致。新增test:contract命令。
+- typecheck、Lint、单元/组件/契约49项、build通过，独立契约组4项通过。负向夹具验证缺字段/错误类型/JOB_INDEX非法PARTIAL/取消false均拒绝；客户端忽略顶层和嵌套新字段，坏数据抛contract。
+- 首次Lint检测到新契约测试格式差异，重新格式化后通过。未改用户流程，本任务未重复E2E和真实冒烟（T1已跑E2E，T3/T4跑真实任务）。
+
+## 2026-11-27 F1.3-T1 契约快照与生成（feature/f1.3-contract-tasks，进行中）
+
+- F1.2已合并并推送develop（9f96603）与阶段分支，develop远端CI45876655026 success；连续TLS握手失败后分支/develop分开推送成功，保留证书校验。
+- 后端fetch确认S1.4-T8/T9已合并origin/develop，提交01d9a36c882d5e7c0e0945b4bc7a2ed6ee11cc66。快照来自该提交docs/openapi.json（非后端工作区），SOURCE记录SHA/日期，单独提交b8a076c。仅包含health与任务查询/取消3条路径。
+- @hey-api/openapi-ts生成类型与Zod4 Schema，health删除手写定义，错误结构消费生成Schema（兼容新增错误code）。dev/typecheck/test/build先生成，不提交src/generated。直接运行生成Schema确认忽略health扩展字段和任务双分支联合。
+- 冻结安装、typecheck、Lint、单元/组件45项、build、E2E7项通过。首轮typecheck发现0.99不接受旧版version插件选项，删除后通过；测试一轮101.76秒主要在模块/环境加载，未放宽超时或覆盖门槛。
+- 任务页真实联调尚未执行，安排T3/T4；无后端文件修改。
+
 ## 2026-11-27 F1.2-T6 文档与阶段回归（feature/f1.2-app-shell，待验收）
 
 - README、架构和API/测试文档更新至实际边界，路线图F1.2待验收；T1–T6分别提交。共享层已可复用，所有业务页仍为占位，未描述为完成。
