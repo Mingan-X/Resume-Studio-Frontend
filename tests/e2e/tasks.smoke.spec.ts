@@ -10,3 +10,14 @@ test('真实后端合成任务终态和计数可查询', async ({ page }) => {
   await page.reload();
   await expect(page.getByText('合成任务完成', { exact: true })).toBeVisible();
 });
+
+test('真实取消请求持久化，安全边界终态由后端提交', async ({ page, request }) => {
+  const taskId = z.uuid().parse(process.env.SMOKE_QUEUED_TASK_ID);
+  await page.goto(`/tasks/${taskId}`);
+  page.once('dialog', (d) => d.accept());
+  await page.getByRole('button', { name: '取消任务', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: '取消请求已提交' })).toBeVisible();
+  const response = await request.get(`/api/v1/tasks/${taskId}`);
+  expect(await response.json()).toMatchObject({ cancelRequested: true, status: 'QUEUED' });
+  // runner结束时调用后端真实对账服务，并核对最终CANCELLED，然后精确清理。
+});

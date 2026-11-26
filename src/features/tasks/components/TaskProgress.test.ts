@@ -12,7 +12,10 @@ import {
 import { server } from '../../../../tests/mocks/setup';
 import TaskProgress from './TaskProgress.vue';
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
 function render() {
   const client = new QueryClient();
   const wrapper = mount(TaskProgress, {
@@ -31,6 +34,47 @@ function render() {
   };
 }
 describe('任务进度页', () => {
+  it('取消提交期间禁用按钮，失败保留状态与requestId', async () => {
+    vi.stubGlobal(
+      'confirm',
+      vi.fn(() => true),
+    );
+    let release: (() => void) | undefined;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let posts = 0;
+    server.use(
+      http.post('*/api/v1/tasks/:taskId/cancel', async ({ request }) => {
+        posts++;
+        expect(await request.json()).toEqual({});
+        await gate;
+        return HttpResponse.json(
+          {
+            code: 'INTERNAL_ERROR',
+            message: '暂时不能取消',
+            retryable: false,
+            requestId: '00000000-0000-4000-8000-000000000001',
+          },
+          { status: 500 },
+        );
+      }),
+    );
+    const { wrapper, cleanup } = render();
+    await expect.poll(() => wrapper.find('section').exists()).toBe(true);
+    const button = wrapper.findAll('button').find((item) => item.text() === '取消任务');
+    if (!button) throw new Error('missing cancellation');
+    await button.trigger('click');
+    await expect.poll(() => posts).toBe(1);
+    expect(button.attributes('disabled')).toBeDefined();
+    await button.trigger('click');
+    expect(posts).toBe(1);
+    release?.();
+    await expect.poll(() => wrapper.text()).toContain('暂时不能取消');
+    expect(wrapper.text()).toContain('00000000-0000-4000-8000-000000000001');
+    expect(wrapper.text()).toContain('等待处理');
+    cleanup();
+  });
   it('显示重试时间、后端阶段和计数而非百分比', async () => {
     server.use(http.get('*/api/v1/tasks/:taskId', () => HttpResponse.json(retryTask)));
     const { wrapper, cleanup } = render();
