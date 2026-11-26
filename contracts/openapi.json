@@ -1,0 +1,642 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Resume Studio Backend",
+    "version": "0.1.0",
+    "description": "S1.4已实现HTTP契约。任务路由仅在TASK_API_ENABLED=true时启用；固定开发身份不提供生产认证。"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "与前端同源；本地通过代理连接API"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "CancelTaskRequest": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "CancelTaskResponse": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cancelRequested": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "taskId",
+          "cancelRequested"
+        ],
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "VALIDATION_ERROR",
+              "BAD_REQUEST",
+              "NOT_FOUND",
+              "IDEMPOTENCY_CONFLICT",
+              "INVALID_STATE",
+              "HTTP_ERROR",
+              "INTERNAL_ERROR"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "retryable",
+          "requestId"
+        ],
+        "additionalProperties": false
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "api"
+            ]
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "development",
+              "test",
+              "production"
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "service",
+          "environment"
+        ],
+        "additionalProperties": false
+      },
+      "TaskResponse": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "taskId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "stage": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "progress": {
+                "type": "object",
+                "properties": {
+                  "completed": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "total": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "completed",
+                  "total"
+                ],
+                "additionalProperties": false
+              },
+              "attempt": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "nextRetryAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "error": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "enum": [
+                      "UPSTREAM_TIMEOUT",
+                      "RATE_LIMITED",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "UPSTREAM_5XX",
+                      "INPUT_INVALID",
+                      "UNSUPPORTED_INPUT",
+                      "OUTPUT_INVALID",
+                      "EXECUTION_FAILED",
+                      "BUDGET_EXHAUSTED",
+                      "DEADLINE_EXCEEDED"
+                    ]
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              "cancelRequested": {
+                "type": "boolean"
+              },
+              "taskType": {
+                "type": "string",
+                "enum": [
+                  "ANALYSIS"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "QUEUED",
+                  "RUNNING",
+                  "RETRY_WAIT",
+                  "SUCCEEDED",
+                  "PARTIAL",
+                  "FAILED",
+                  "CANCELLED"
+                ]
+              },
+              "reportId": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "taskId",
+              "stage",
+              "progress",
+              "attempt",
+              "nextRetryAt",
+              "error",
+              "cancelRequested",
+              "taskType",
+              "status",
+              "reportId"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "taskId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "stage": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "progress": {
+                "type": "object",
+                "properties": {
+                  "completed": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "total": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "completed",
+                  "total"
+                ],
+                "additionalProperties": false
+              },
+              "attempt": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "nextRetryAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "error": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "enum": [
+                      "UPSTREAM_TIMEOUT",
+                      "RATE_LIMITED",
+                      "DEPENDENCY_UNAVAILABLE",
+                      "UPSTREAM_5XX",
+                      "INPUT_INVALID",
+                      "UNSUPPORTED_INPUT",
+                      "OUTPUT_INVALID",
+                      "EXECUTION_FAILED",
+                      "BUDGET_EXHAUSTED",
+                      "DEADLINE_EXCEEDED"
+                    ]
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              "cancelRequested": {
+                "type": "boolean"
+              },
+              "taskType": {
+                "type": "string",
+                "enum": [
+                  "JOB_INDEX"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "QUEUED",
+                  "RUNNING",
+                  "RETRY_WAIT",
+                  "SUCCEEDED",
+                  "FAILED",
+                  "CANCELLED"
+                ]
+              },
+              "reportId": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "taskId",
+              "stage",
+              "progress",
+              "attempt",
+              "nextRetryAt",
+              "error",
+              "cancelRequested",
+              "taskType",
+              "status",
+              "reportId"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "进程存活检查",
+        "description": "无查询参数；未知查询字段返回400。成功不表示外部依赖就绪。",
+        "responses": {
+          "200": {
+            "description": "进程可响应",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求格式或Schema校验失败",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "安全的服务端错误",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{taskId}": {
+      "get": {
+        "operationId": "getTask",
+        "summary": "查询当前开发主体的任务",
+        "description": "需显式启用本地任务API。未知查询字段返回400；不存在或其他owner的资源统一404。progress来自已保存计数，总量未知为null；不暴露执行令牌或输入。",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "taskId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "当前任务快照",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求格式或Schema校验失败",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "资源不可见或不存在",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "安全的服务端错误",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{taskId}/cancel": {
+      "post": {
+        "operationId": "cancelTask",
+        "summary": "持久化取消请求",
+        "description": "请求必须为application/json空对象。202只表示请求已保存，最终状态通过GET查询。非终态重复请求返回202；终态返回409。由消费者或对账器在安全边界提交CANCELLED。",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "taskId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelTaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "取消请求已保存",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求格式或Schema校验失败",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "资源不可见或不存在",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "任务已结束，INVALID_STATE",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "安全的服务端错误",
+            "headers": {
+              "x-request-id": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "required": true
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}
