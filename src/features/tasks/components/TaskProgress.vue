@@ -46,6 +46,10 @@ const taskError = computed(() =>
       <p class="status">{{ statusLabels[task.status] }}</p>
       <dl>
         <div>
+          <dt>任务类型</dt>
+          <dd>{{ task.taskType === 'ANALYSIS' ? '简历与岗位分析' : '岗位索引' }}</dd>
+        </div>
+        <div>
           <dt>当前阶段</dt>
           <dd>{{ stageLabel(task.stage) }}</dd>
         </div>
@@ -69,6 +73,7 @@ const taskError = computed(() =>
           </dd>
         </div>
       </dl>
+      <p>计数由后端按当前阶段提供，不同阶段的计数单位可能不同。</p>
       <ErrorNotice v-if="taskError" :error="taskError" @retry="refetch()" />
       <ErrorNotice
         v-if="cancellationError"
