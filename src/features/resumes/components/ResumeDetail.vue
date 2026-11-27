@@ -19,7 +19,9 @@ watch([query.data, () => props.blockId], async () => {
   if (!query.data.value?.extractedDocument.blocks.some((block) => block.id === props.blockId))
     return;
   await nextTick();
-  document.getElementById(`block-${props.blockId}`)?.scrollIntoView();
+  const target = document.getElementById(`block-${props.blockId}`);
+  target?.scrollIntoView();
+  target?.focus({ preventScroll: true });
 });
 </script>
 
@@ -73,6 +75,7 @@ watch([query.data, () => props.blockId], async () => {
         :key="block.id"
         tabindex="-1"
         class="block"
+        :class="{ 'is-source-target': block.id === blockId }"
       >
         <h3>
           <a :href="`#block-${block.id}`">{{ locationLabel(block.location) }}</a>
@@ -104,7 +107,8 @@ dd {
   margin-block: var(--space-4);
   scroll-margin-top: var(--space-8);
 }
-.block:target {
+.block:target,
+.block.is-source-target {
   outline: 2px solid var(--brand);
 }
 h3 {

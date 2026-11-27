@@ -33,6 +33,7 @@ try {
       '--project=real',
       '--workers=1',
       'analyses.smoke.spec.ts',
+      'reports.smoke.spec.ts',
     ],
     { cwd: root, stdio: 'inherit' },
   );

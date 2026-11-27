@@ -8,6 +8,49 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.4-T8 阶段文档与交付（feature/f2.4-reports，待验收）
+
+- README/API/界面规范/测试映射同步实际实现与契约缺口，F2.4待验收；T1–T8独立提交。可执行部分已完成，真实模型报告内容延后，最终名次数字和固定尾零待后端展示字段，均不前端补算。
+- 最终代码typecheck/Lint、103项测试、build通过（T6），21项E2E与2项非模型真实检查/清理通过（T7），冻结安装见T4、契约8项见T1；本项纯文档核对链接及git diff --check，不重复模型或数据库操作。
+
+## 2026-11-28 F2.4-T7 展示规则与浏览器核对（feature/f2.4-reports）
+
+- 21项MSW E2E通过，集中核对原分数、UNKNOWN/UNMET、unknown图表/表格、PARTIAL、推荐不足、待核实分区、覆盖率/上界说明、HTML证据与跳转；不伪造进度由任务既有测试覆盖，revision来源由概要组件测试覆盖，实际重算流程在F2.5验证。
+- 内置浏览器导航/截图核对PARTIAL概要、六维图和等价表格：四个已知点、三段线，未知两轴无点，布局无重叠。辅助使用MSW合成报告，未声称真实模型验证。
+- 最终Lint通过；真实非模型组2项通过（创建QUEUED及报告404/请求编号），隔离清理成功。完整真实报告内容冒烟依真实模型产出，按F2.4-T7延后，未伪造报告写入后端。
+
+## 2026-11-28 F2.4-T6 待核实与硬条件不符合（feature/f2.4-reports）
+
+- 按后端pending/ineligible数组分区，待核实不显示总分且不混入推荐；列出无法验证的硬条件、原因及未完成判断。不符合区可折叠并逐条解释硬unmet，保留原始证据。
+- typecheck、Lint、103项测试、build通过；测试确认pending的21.37不会被展示为总分，BUDGET与unknown分离，ineligible有明确硬条件解释。无前端资格计算；完整报告浏览器核对在T7。
+
+## 2026-11-28 F2.4-T5 推荐与逐项判断（feature/f2.4-reports）
+
+- 使用后端top10有序ID和results查找原值，展示总分/coverage/upperBound与可展开说明；不补卡片、不按分数重排、不借召回rank生成名次。逐项显示贡献/verdict/理由/证据与位置，UNKNOWN灰蓝文字和UNMET红色文字分离，未完成执行另示预算/失败/待执行。
+- typecheck、Lint、102项测试、build通过，断言63.47/72.11/91.23与47.13原样显示、仅1个推荐、pending不混入、HTML不执行。首次组件单词名Lint失败，改ReportRecommendations并修复导入排序后通过；未禁用规则。完整报告E2E在T7。
+
+## 2026-11-28 F2.4-T4 六维画像（feature/f2.4-reports）
+
+- ECharts按需Radar/Graphic/SVG，六轴保留，只绘assessed后端分值点，相邻两轴均已知才连线；unknown没有点和到0连线。已知0分仍为中心点。图旁明确列出证据不足维度，六维等价表格含等级/分值/理由/证据。
+- registry/官方包核对、冻结安装、typecheck、Lint、100项测试、build和20项E2E通过；几何测试断言4已知点/3段线及真实零点，表格显示66.37与证据不足。主入口gzip95.09kB，图表在报告懒加载块145.95kB，非完整性能验收。机械盘依赖安装3m57s、初次Lint/测试加载较慢，未并行或放宽标准。
+
+## 2026-11-28 F2.4-T3 结构化简历与证据（feature/f2.4-reports）
+
+- 教育/工作/项目/技能按快照展示，null和空数组为未识别，来源quote及完整块按纯文本展开。来源定位使用保存的块ID/区间，PDF/DOCX位置原样；无HTML执行。
+- 对T1的resumeId缺口补充：可通过已实现analyses/options逐页查回resumeVersionId→resumeId映射，用户点击时才查，不伪造字段；找到后跳双ID详情锚点，找不到仍可核对报告内原文。
+- typecheck、Lint、98项测试、build通过，20项E2E通过。首轮跨页锚点用例发现动态加载DOM不可靠触发CSS :target，改为按经校验blockId显式高亮/滚动/聚焦，E2E核对URL、目标原文、高亮和焦点后通过。真实模型报告仍延后。
+
+## 2026-11-28 F2.4-T2 报告概要（feature/f2.4-reports）
+
+- /reports/:reportId懒加载、Zod路由入口与Query状态，概要展示分析时间、版本、岗位范围、规则版本与来源revision。PARTIAL横幅直接展示候选/要求计数、原因及“排名仅基于已评估岗位”。
+- typecheck、Lint、96项测试、build通过，19项E2E通过。刷新/重新打开比较可见快照；首次用innerText采集却以textContent断言，空白差异导致失败，统一useInnerText后通过，未放松内容断言。真实报告冒烟按延后表处理。
+
+## 2026-11-28 F2.4-T1 报告契约与夹具（feature/f2.4-reports，进行中）
+
+- F2.3已合并推送develop 436c367；F2.4前fetch后端b2104ea并核验S3.1合并5899725。快照不变。新增报告查询、生成类型派生以及覆盖展示规则的PARTIAL夹具（真实模型产物仍延后）。
+- typecheck、Lint、94项测试、build、8项契约专项通过。夹具含不与贡献简单相加相等的63.47/72.11/91.23、unknown画像/硬门槛、unmet、BUDGET未执行、HTML quote及不足10条原因，生成Schema验证通过。
+- 契约缺口：最终ranking仅top10 ID有序数组，无最终rank数字；不能拿召回rank冒充，不自行编号算名次。报告仅resumeVersionId无resumeId，不能直拼既有双ID简历详情；先使用报告内完整原文块定位。数值返回number，无法保证尾零两位文本；原样显示，不前端取整。按§6记录并跳过缺字段部分，其他展示继续。
+
 ## 2026-11-28 F2.3-T5 文档与交付（feature/f2.3-analyses，待验收）
 
 - README/API/测试命令同步，F2.3待验收。T1–T5独立提交；完成后no-ff集成develop并推送。最终代码基础检查93项测试、build，18项E2E与非模型真实创建通过；契约7项见T1。纯文档不重复测试，链接与diff检查执行。

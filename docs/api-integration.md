@@ -4,6 +4,8 @@
 
 ## 1. 当前可对接的接口
 
+F2.4消费GET reports/:reportId不可变快照，按top10/pending/ineligible返回顺序显示，不用召回rank生成最终名次；number分数原样呈现，不取整补零。结构化简历/画像/逐项执行与证据来自content。用户请求原简历详情时，通过analyses/options分页查询实际版本映射再跳双ID详情；找不到保留报告内文本核对。预算/失败/未执行不转成unknown。真实模型报告内容仍延后。
+
 F2.3已接入GET analyses/options和POST analyses。简历选项由后端过滤为解析成功，corpus版本名/岗位数量/规则配置原样展示；两类游标分别分页，输入变更换幂等键。创建只消费taskId跳站内任务路由，不直接导航未经校验的URL。配置为null时提示不可创建。真实模型终态联调延后。
 
 F2.2已接入岗位列表、详情/版本、创建、按kind编辑、建议、确认和发布。字段均来自快照生成，索引新增状态宽容显示但未知状态禁止编辑；缺模型仍显示后端message并按MODEL_UNAVAILABLE提示手工录入。JD引用使用用户实际选中文字的UTF-16区间，不猜测或解析message；权重不归一化。发布先confirm后带Idempotency-Key publish，同一版本重试复用键，编辑已发布版以返回的新草稿为准。
