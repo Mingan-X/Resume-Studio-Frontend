@@ -9,3 +9,4 @@ src/generated/
 !.env.example
 *.local
 *.log
+.smoke-runs/

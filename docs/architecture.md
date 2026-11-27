@@ -1,6 +1,6 @@
 # 前端架构
 
-状态：F1.1–F1.3已建立应用骨架、共享层、生成契约、健康及任务进度/取消；简历、岗位、分析、报告和登录页面仍为占位。业务SSE和认证由后续阶段交付。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
+状态：F1.1–F2.1已建立工程、共享层、任务进度/取消和简历上传/列表/文本详情；岗位、分析、报告及登录仍待后续阶段。业务SSE和认证尚未接入。技术选型依据见[ADR-0001](decisions/0001-frontend-stack.md)，接口对接见[API对接](api-integration.md)，页面与展示规则见[界面规范](ui-guidelines.md)。
 
 ## 1. 职责边界
 
@@ -118,6 +118,7 @@ features/<领域>/
 | `/:pathMatch(.*)*` | 404页面 | — |
 
 - 页面组件用路由级懒加载（`() => import(...)`）。
+- 简历详情保持`/resumes/:resumeId`，必须带`?versionId=<UUID>`，原文锚点`#block-<UUID>`；双ID和锚点经Zod校验，未提供合法版本不请求接口。列表及上传成功入口都带版本，刷新不隐式换latest。
 - 路由参数在页面入口用Zod校验，非法参数显示404，不发请求。
 - 登录在S3.2之前不存在；路由守卫预留统一入口 `app/router/guards.ts`，开发期始终放行。S3.2后收到401时跳转 `/login?redirect=<原路径>`，`redirect` 只接受站内相对路径。
 

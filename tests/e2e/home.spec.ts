@@ -4,7 +4,7 @@ test('首页可打开', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Resume Studio');
   await expect(page.getByRole('heading', { name: '简历', exact: true })).toBeVisible();
-  await expect(page.getByText('功能开发中')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '已上传简历' })).toBeVisible();
   await page.getByRole('button', { name: '检查服务连接' }).click();
   await expect(page.getByText('已连接（ok）')).toBeVisible();
 });

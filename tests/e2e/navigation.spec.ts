@@ -5,7 +5,7 @@ test('占位页不请求业务数据，导航支持键盘', async ({ page }) => 
   page.on('request', (request) => {
     if (new URL(request.url()).pathname.startsWith('/api/')) requests.push(request.url());
   });
-  await page.goto('/');
+  await page.goto('/reports');
   const jobs = page.getByRole('navigation').getByRole('link', { name: '岗位', exact: true });
   await jobs.focus();
   await page.keyboard.press('Enter');

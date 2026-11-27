@@ -14,12 +14,15 @@ pnpm run test:e2e    # playwright test
 pnpm run test:smoke  # 连接真实后端
 pnpm run test:contract # 契约专项
 pnpm run test:smoke:tasks # 隔离合成任务真实HTTP与数据库
+pnpm run test:smoke:resumes # PDF/DOCX与扫描/加密拒绝边界，串行4场景
 pnpm run build       # 生产构建
 ```
 
 `pnpm test` 不依赖后端或网络。`test:e2e` 分两组：使用MSW的界面流程测试，以及连接本地真实后端的冒烟测试；后端未启动时冒烟测试失败，不自动跳过。
 
 ## 2. 测试分层
+
+简历真实冒烟复用同级后端已有dist和真实解析器，不执行后端安装/构建/迁移。需已部署迁移、本项目PostgreSQL运行及3000端口空闲。专用文件位于前端忽略目录.smoke-runs，本轮随机owner；上传全部安全停止并关闭API后精确清理。失败停止未知时保留manifest，不删除既有数据或重置数据库。四种文件场景串行执行，每个沿用既定测试/断言/解析期限。
 
 任务真实冒烟要求后端仓库与前端同级，已按后端部署文档生成dist并应用既有迁移，infra/.env存在且项目PostgreSQL运行；3000端口空闲。脚本不构建/写入后端，不修改配置或启动/停止Docker。复用后端测试装配与真实控制器/服务，IdentityPort绑定本轮随机owner（不接受HTTP身份输入），运行后核验归属并只清理本轮数据；取消请求最终由后端对账服务提交CANCELLED。该隔离测试身份仅用于本地冒烟，不代表生产认证。环境不满足时失败，不自动跳过。
 
