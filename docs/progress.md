@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.1-T2 上传组件（feature/f2.1-resumes）
+
+- 选择/拖拽单文件、PDF/DOCX扩展名与10MiB单处上限、非空预检、浏览器字节进度、取消、aria-live状态和解析成功入口。413/422保留后端原因与requestId；SCANNED_PDF/ENCRYPTED_FILE按reason明确提示不支持，不解析message。请求中禁重复提交，取消不自动重试。
+- typecheck、Lint、73项测试、build通过；组件覆盖格式/空/超限、三类文件错误和取消不重试，既有真实XHR传输测试保留。重试入口额外遵守当前文件校验，类型/Lint复查通过；页面流程E2E与真实文件联调在T5统一运行。尚未把组件作为完整简历功能交付。
+
 ## 2026-11-28 F2.1-T1 简历契约与接口（feature/f2.1-resumes，进行中）
 
 - fetch后端确认S2.1–S3.3均已合并，origin/develop为b2104ea374ba6bc9f1da799033c7f37d5ab80153；已读handoff-frontend-s33及相关契约。普通任务串行推进，不使用goal或子代理。
