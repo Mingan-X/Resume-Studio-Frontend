@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.3-T1 分析接口（feature/f2.3-analyses，进行中）
+
+- F2.2已合并并推送develop c8774ab；开始前fetch后端b2104ea，核对S2.4合并12343f4为其祖先。契约快照仍为相同SHA。读取analysis-input/workflow和选择接口说明。
+- 接入analyses/options简历/语料各自游标和创建接口，输入/响应由生成Schema校验；只提交resumeVersionId/asOfDate/jobCorpusVersionId，corpus为版本名，不选latest、不传配置/owner。输入变更换幂等键，同输入重试复用。
+- typecheck、Lint、91项测试、build、契约7项通过；页面与真实非模型创建在T2–T4，真实模型终态验证按规则延后。
+
 ## 2026-11-28 F2.2-T7 文档与阶段交付（feature/f2.2-jobs，待验收）
 
 - README、API对接和测试前置同步，F2.2待验收。T1–T7按任务提交，计划no-ff合并develop并推送阶段分支/develop。没有新依赖或快照变动（仍b2104ea）。
