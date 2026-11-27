@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.4-T6 待核实与硬条件不符合（feature/f2.4-reports）
+
+- 按后端pending/ineligible数组分区，待核实不显示总分且不混入推荐；列出无法验证的硬条件、原因及未完成判断。不符合区可折叠并逐条解释硬unmet，保留原始证据。
+- typecheck、Lint、103项测试、build通过；测试确认pending的21.37不会被展示为总分，BUDGET与unknown分离，ineligible有明确硬条件解释。无前端资格计算；完整报告浏览器核对在T7。
+
 ## 2026-11-28 F2.4-T5 推荐与逐项判断（feature/f2.4-reports）
 
 - 使用后端top10有序ID和results查找原值，展示总分/coverage/upperBound与可展开说明；不补卡片、不按分数重排、不借召回rank生成名次。逐项显示贡献/verdict/理由/证据与位置，UNKNOWN灰蓝文字和UNMET红色文字分离，未完成执行另示预算/失败/待执行。

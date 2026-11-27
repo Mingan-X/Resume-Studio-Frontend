@@ -2,6 +2,7 @@
 import RequestState from '@/shared/ui/RequestState.vue';
 
 import { useReport } from '../api/useReport';
+import EligibilityGroups from './EligibilityGroups.vue';
 import ReportProfile from './ReportProfile.vue';
 import ReportRecommendations from './ReportRecommendations.vue';
 import ReportSummary from './ReportSummary.vue';
@@ -16,7 +17,7 @@ const query = useReport(() => props.reportId);
         :content="query.data.value.content"
       /><ReportProfile :content="query.data.value.content" /><ReportRecommendations
         :content="query.data.value.content"
-      /></div
+      /><EligibilityGroups :content="query.data.value.content" /></div
   ></RequestState>
 </template>
 <style scoped>
