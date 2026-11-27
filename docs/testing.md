@@ -16,6 +16,7 @@ pnpm run test:contract # 契约专项
 pnpm run test:smoke:tasks # 隔离合成任务真实HTTP与数据库
 pnpm run test:smoke:resumes # PDF/DOCX与扫描/加密拒绝边界，串行4场景
 pnpm run test:smoke:jobs # 真实JD/要求/发布/任务查询；单worker
+pnpm run test:smoke:analyses # 合成授权输入，真实创建至QUEUED，不运行模型
 pnpm run build       # 生产构建
 ```
 
