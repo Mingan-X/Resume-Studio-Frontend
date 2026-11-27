@@ -4,7 +4,7 @@
 
 ## 1. 当前可对接的接口
 
-F1.3已对接 `GET /health`、`GET /api/v1/tasks/:taskId`、`POST /api/v1/tasks/:taskId/cancel`，全部消费生成契约。任务使用本地开发身份，已通过真实合成任务联调，不代表生产认证或分析业务完成。来源SHA见[SOURCE](../contracts/SOURCE.md)，其他业务接口须在对应后端阶段合并后消费。
+当前已对接health、任务查询/取消、简历上传/游标列表/双ID版本详情，全部消费生成契约；契约快照已同步后端S3.3，但只有已实现页面使用对应接口。真实冒烟在本地开发身份完成，不代表生产认证或真实模型分析完成。来源SHA见[SOURCE](../contracts/SOURCE.md)。
 
 ## 2. 契约同步
 
@@ -70,6 +70,8 @@ export function useTask(taskId: MaybeRefOrGetter<string>) {
 - 提交中禁用提交按钮，防止重复点击产生多个键。
 
 ## 6. 文件上传
+
+F2.1已实现：文件字段file，10MiB上限仅在uploadRules定义；POST成功201表示同步解析产物已保存。失败手动重试保留同一Idempotency-Key，选新文件换键；取消不自动重试。reason直接来自生成契约，扫描/加密明确提示不支持。GET列表缺少文件名/解析状态，当前说明缺口并显示编号/时间/版本，不从其他字段推算。详情GET使用`/resumes/:resumeId/versions/:versionId`，保留后端文本块与位置，不展示语义结构化信息。
 
 - `fetch` 无法报告上传进度，上传使用 `shared/api/upload.ts` 中基于 `XMLHttpRequest` 的实现，同样产出 `AppError`。
 - 提交前检查扩展名（`.pdf`、`.docx`）与大小上限，提示文案说明后端仍会校验内容。上限数值从后端接口或文档获取，不在多处硬编码。
