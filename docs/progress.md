@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.4-T3 结构化简历与证据（feature/f2.4-reports）
+
+- 教育/工作/项目/技能按快照展示，null和空数组为未识别，来源quote及完整块按纯文本展开。来源定位使用保存的块ID/区间，PDF/DOCX位置原样；无HTML执行。
+- 对T1的resumeId缺口补充：可通过已实现analyses/options逐页查回resumeVersionId→resumeId映射，用户点击时才查，不伪造字段；找到后跳双ID详情锚点，找不到仍可核对报告内原文。
+- typecheck、Lint、98项测试、build通过，20项E2E通过。首轮跨页锚点用例发现动态加载DOM不可靠触发CSS :target，改为按经校验blockId显式高亮/滚动/聚焦，E2E核对URL、目标原文、高亮和焦点后通过。真实模型报告仍延后。
+
 ## 2026-11-28 F2.4-T2 报告概要（feature/f2.4-reports）
 
 - /reports/:reportId懒加载、Zod路由入口与Query状态，概要展示分析时间、版本、岗位范围、规则版本与来源revision。PARTIAL横幅直接展示候选/要求计数、原因及“排名仅基于已评估岗位”。
