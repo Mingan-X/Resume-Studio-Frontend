@@ -20,7 +20,8 @@
     "test:smoke": "playwright test --project=real health.smoke.spec.ts",
     "api:generate": "openapi-ts",
     "test:contract": "pnpm run api:generate && vitest run tests/contract",
-    "test:smoke:tasks": "pnpm run api:generate && node scripts/runTaskSmoke.mjs"
+    "test:smoke:tasks": "pnpm run api:generate && node scripts/runTaskSmoke.mjs",
+    "test:smoke:resumes": "pnpm run api:generate && node scripts/runResumeSmoke.mjs"
   },
   "dependencies": {
     "@tanstack/vue-query": "5.108.4",
