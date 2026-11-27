@@ -22,7 +22,8 @@
     "test:contract": "pnpm run api:generate && vitest run tests/contract",
     "test:smoke:tasks": "pnpm run api:generate && node scripts/runTaskSmoke.mjs",
     "test:smoke:resumes": "pnpm run api:generate && node scripts/runResumeSmoke.mjs",
-    "test:smoke:jobs": "pnpm run api:generate && node scripts/runJobSmoke.mjs"
+    "test:smoke:jobs": "pnpm run api:generate && node scripts/runJobSmoke.mjs",
+    "test:smoke:analyses": "pnpm run api:generate && node scripts/runAnalysisSmoke.mjs"
   },
   "dependencies": {
     "@tanstack/vue-query": "5.108.4",
