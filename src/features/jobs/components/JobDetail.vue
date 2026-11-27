@@ -7,6 +7,7 @@ import { useJob } from '../api/useJobs';
 import type { JobVersion } from '../model/contracts';
 import { indexLabel, publicationLabel } from '../model/labels';
 import JobForm from './JobForm.vue';
+import JobRequirements from './JobRequirements.vue';
 
 const props = withDefaults(defineProps<{ jobId: string; versionId?: string }>(), { versionId: '' });
 const query = useJob(
@@ -36,6 +37,7 @@ async function saved(job: JobVersion) {
         @saved="saved"
       />
       <p v-else>当前版本状态待确认，暂不能编辑。</p>
+      <JobRequirements :key="query.data.value.id" :job="query.data.value" @saved="saved" />
     </template>
   </RequestState>
 </template>

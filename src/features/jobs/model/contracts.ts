@@ -10,6 +10,7 @@ export const jobsSchema = zListJobsResponse.extend({
 export type JobVersion = z.infer<typeof jobSchema>;
 export type Requirement = JobVersion['requirements'][number];
 export type Dimension = JobVersion['dimensionWeights'][number]['dimension'];
+export const requirementSchema = zGetJobResponse.shape.requirements.element;
 export type { ConfirmJobData, CreateJobData, EditJobDraftData } from '@/generated/types.gen';
 export {
   zCreateJobBody as createJobSchema,
