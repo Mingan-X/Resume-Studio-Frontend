@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.4-T5 推荐与逐项判断（feature/f2.4-reports）
+
+- 使用后端top10有序ID和results查找原值，展示总分/coverage/upperBound与可展开说明；不补卡片、不按分数重排、不借召回rank生成名次。逐项显示贡献/verdict/理由/证据与位置，UNKNOWN灰蓝文字和UNMET红色文字分离，未完成执行另示预算/失败/待执行。
+- typecheck、Lint、102项测试、build通过，断言63.47/72.11/91.23与47.13原样显示、仅1个推荐、pending不混入、HTML不执行。首次组件单词名Lint失败，改ReportRecommendations并修复导入排序后通过；未禁用规则。完整报告E2E在T7。
+
 ## 2026-11-28 F2.4-T4 六维画像（feature/f2.4-reports）
 
 - ECharts按需Radar/Graphic/SVG，六轴保留，只绘assessed后端分值点，相邻两轴均已知才连线；unknown没有点和到0连线。已知0分仍为中心点。图旁明确列出证据不足维度，六维等价表格含等级/分值/理由/证据。

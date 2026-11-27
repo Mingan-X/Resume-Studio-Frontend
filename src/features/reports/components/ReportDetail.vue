@@ -3,6 +3,7 @@ import RequestState from '@/shared/ui/RequestState.vue';
 
 import { useReport } from '../api/useReport';
 import ReportProfile from './ReportProfile.vue';
+import ReportRecommendations from './ReportRecommendations.vue';
 import ReportSummary from './ReportSummary.vue';
 import StructuredResume from './StructuredResume.vue';
 const props = defineProps<{ reportId: string }>();
@@ -13,7 +14,9 @@ const query = useReport(() => props.reportId);
     ><div v-if="query.data.value" class="report">
       <ReportSummary :report="query.data.value" /><StructuredResume
         :content="query.data.value.content"
-      /><ReportProfile :content="query.data.value.content" /></div
+      /><ReportProfile :content="query.data.value.content" /><ReportRecommendations
+        :content="query.data.value.content"
+      /></div
   ></RequestState>
 </template>
 <style scoped>
