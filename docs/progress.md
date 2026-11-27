@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.2-T2 岗位列表（feature/f2.2-jobs）
+
+- /jobs显示岗位、版本、发布/索引状态、时间与入口，游标加载更多；未READY标注未参与召回。未知枚举显示通用文案，INDEXING若将来返回则显示索引中，当前后端只有PENDING/READY/FAILED/NOT_REQUESTED。
+- typecheck、Lint、85项测试、build、14项E2E通过；组件覆盖失败/待索引/未来枚举。无需真实模型；实际岗位联调在T6执行。
+
 ## 2026-11-28 F2.2-T1 岗位接口与契约（feature/f2.2-jobs，进行中）
 
 - F2.1已no-ff合并并推送develop c0192d5及阶段分支；F2.2前fetch后端b2104ea，merge-base核对S2.2合并c50faf9属于origin/develop。快照与SOURCE保持同SHA，未重复提交相同内容。

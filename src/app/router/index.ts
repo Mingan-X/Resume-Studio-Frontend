@@ -4,7 +4,6 @@ import { installGuards } from './guards';
 
 export function createApplicationRouter() {
   const pages = [
-    { path: '/jobs', title: '岗位' },
     { path: '/jobs/new', title: '新建岗位' },
     { path: '/jobs/:jobId', title: '岗位详情' },
     { path: '/analyses/new', title: '发起分析' },
@@ -16,6 +15,7 @@ export function createApplicationRouter() {
     history: createWebHistory(),
     routes: [
       { path: '/', redirect: '/resumes' },
+      { path: '/jobs', component: () => import('@/pages/JobsPage.vue'), meta: { title: '岗位' } },
       {
         path: '/resumes/:resumeId',
         component: () => import('@/pages/ResumeDetailPage.vue'),
