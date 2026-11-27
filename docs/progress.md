@@ -8,6 +8,33 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.3-T5 文档与交付（feature/f2.3-analyses，待验收）
+
+- README/API/测试命令同步，F2.3待验收。T1–T5独立提交；完成后no-ff集成develop并推送。最终代码基础检查93项测试、build，18项E2E与非模型真实创建通过；契约7项见T1。纯文档不重复测试，链接与diff检查执行。
+- 真实模型终态冒烟仍为延后项，不使用合成模型伪装完成；后端/main未改动。
+
+## 2026-11-28 F2.3-T4 创建流程联调（feature/f2.3-analyses）
+
+- 18项MSW E2E及1项真实分析选项→创建→QUEUED流程通过，typecheck/Lint通过。真实API/数据库，合成已解析输入与冻结语料来自后端既有测试准备函数，仅配置版本标识，不执行模型/图/向量/评分。报告入口为空，未假造完成产物。
+- 清理前核验项目归属及taskAttempt为0，停止API后复用后端精确owner清理函数，本轮合成输入/任务/owner清理通过；后端文件未改动。
+- 依赖真实模型的“发起→终态”冒烟延后统一验收，未执行；本次真实创建成功不代表真实分析可用。
+
+## 2026-11-28 F2.3-T3 真实分析任务展示（feature/f2.3-analyses）
+
+- 按后端analysis-graph定义增加LOAD至SAVE/FINALIZE的阶段标签，显示任务类型并说明不同阶段计数单位；保留未知stage原值。reportId为空不显示入口，有ID才跳报告。
+- typecheck、Lint、93项测试、build通过；新增PARTIAL/MATCH的8/20原样展示及报告入口断言，既有四终态暂停轮询继续通过。用户流程E2E在T4，真实模型产物依既定延后。
+
+## 2026-11-28 F2.3-T2 发起分析页（feature/f2.3-analyses）
+
+- /analyses/new选择已解析简历版本、冻结语料版本及基准日期，分别分页，不默认选latest；提交前显示版本、文件hash、岗位数量及规则版本。配置缺失/空选项明确提示，创建中禁用，失败保留选择，成功跳任务页。
+- typecheck、Lint、92项测试、build、18项E2E通过；接口用例验证同请求网络重试同键、修改日期换键，浏览器验证版本可见/单次POST/跳转。未运行真实模型，非模型真实创建在T4。
+
+## 2026-11-28 F2.3-T1 分析接口（feature/f2.3-analyses，进行中）
+
+- F2.2已合并并推送develop c8774ab；开始前fetch后端b2104ea，核对S2.4合并12343f4为其祖先。契约快照仍为相同SHA。读取analysis-input/workflow和选择接口说明。
+- 接入analyses/options简历/语料各自游标和创建接口，输入/响应由生成Schema校验；只提交resumeVersionId/asOfDate/jobCorpusVersionId，corpus为版本名，不选latest、不传配置/owner。输入变更换幂等键，同输入重试复用。
+- typecheck、Lint、91项测试、build、契约7项通过；页面与真实非模型创建在T2–T4，真实模型终态验证按规则延后。
+
 ## 2026-11-28 F2.2-T7 文档与阶段交付（feature/f2.2-jobs，待验收）
 
 - README、API对接和测试前置同步，F2.2待验收。T1–T7按任务提交，计划no-ff合并develop并推送阶段分支/develop。没有新依赖或快照变动（仍b2104ea）。

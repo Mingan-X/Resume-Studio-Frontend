@@ -12,7 +12,7 @@ Resume-Studio/
 
 ## 当前状态
 
-**F1.1–F2.2已实现，阶段待验收；提前CI已通过远端验证。** 简历上传/证据详情、岗位JD/要求确认/发布和任务查询已通过本地真实后端联调。分析与报告页面仍在开发中；真实模型抽取未验收。简历列表缺字段见[进度与缺口](docs/progress.md)及[开发计划](docs/development-roadmap.md)。
+**F1.1–F2.3已实现，阶段待验收；提前CI已通过远端验证。** 简历、岗位、分析创建与任务查询已通过本地非模型真实联调，分析终态与真实模型抽取待统一验收，报告页面尚待实现。简历列表缺字段见[进度与缺口](docs/progress.md)及[开发计划](docs/development-roadmap.md)。
 
 前端消费health及任务查询/取消；契约来源见[快照记录](contracts/SOURCE.md)。其他接口在对应后端阶段合并后接入。
 
@@ -43,6 +43,7 @@ pnpm run test:contract
 pnpm run test:smoke:tasks # 使用后端已有编译产物和本项目数据库，见测试文档
 pnpm run test:smoke:resumes # 真实合成PDF/DOCX上传；需空闲3000端口
 pnpm run test:smoke:jobs # 真实岗位手工确认和发布；不消费索引任务
+pnpm run test:smoke:analyses # 真实选项与创建，仅验证QUEUED，不执行模型
 ```
 
 `pnpm run preview`预览dist，不提供后端代理；真实联调用dev。E2E启动独立Vite实例，运行前关闭本项目手动启动的dev，避免Vite项目锁冲突。开发时可设置`VITE_ENABLE_MOCKS=true`启用MSW，生产构建禁止该值；mock不代表真实后端可用。

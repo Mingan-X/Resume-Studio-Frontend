@@ -34,6 +34,25 @@ function render() {
   };
 }
 describe('任务进度页', () => {
+  it('真实分析阶段计数原样显示，有reportId才提供入口', async () => {
+    server.use(
+      http.get('*/api/v1/tasks/:taskId', () =>
+        HttpResponse.json({
+          ...queuedTask,
+          status: 'PARTIAL',
+          stage: 'MATCH',
+          progress: { completed: 8, total: 20 },
+          reportId: '40000000-0000-4000-8000-000000000001',
+        }),
+      ),
+    );
+    const { wrapper, cleanup } = render();
+    await expect.poll(() => wrapper.text()).toContain('逐项匹配');
+    expect(wrapper.text()).toContain('8 / 20');
+    expect(wrapper.text()).toContain('查看报告');
+    expect(wrapper.text()).not.toContain('%');
+    cleanup();
+  });
   it('取消提交期间禁用按钮，失败保留状态与requestId', async () => {
     vi.stubGlobal(
       'confirm',
