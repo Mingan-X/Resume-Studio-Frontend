@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
+import { AppError } from '@/shared/api/errors';
 import { useUnsavedChanges } from '@/shared/lib/useUnsavedChanges';
 import ErrorNotice from '@/shared/ui/ErrorNotice.vue';
 import FieldError from '@/shared/ui/FieldError.vue';
@@ -100,6 +101,14 @@ async function saveWeights() {
       :error="suggest.error.value"
       @retry="suggest.mutate(job)"
     />
+    <p
+      v-if="
+        suggest.error.value instanceof AppError && suggest.error.value.code === 'MODEL_UNAVAILABLE'
+      "
+      role="status"
+    >
+      抽取模型当前不可用，可以手工录入要求。
+    </p>
     <ul v-if="suggest.data.value">
       <li v-for="item in suggest.data.value.suggestions.requirements" :key="item.stableId">
         <p>{{ item.description }}</p>
