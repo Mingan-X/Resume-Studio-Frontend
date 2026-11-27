@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { resumeFixture } from './fixtures/resumes';
 import { queuedTask, retryTask } from './fixtures/tasks';
 import { handlers } from './handlers';
+import { jobFlowHandlers } from './jobFlow';
 
 export async function startMocks() {
   const scenario = z
@@ -16,10 +17,12 @@ export async function startMocks() {
       'task-cancel',
       'task-cancel-race',
       'resume-flow',
+      'job-flow',
     ])
     .catch('healthy')
     .parse(new URLSearchParams(window.location.search).get('scenario'));
   const worker = setupWorker(...handlers);
+  if (scenario === 'job-flow') worker.use(...jobFlowHandlers());
   if (scenario === 'resume-flow') {
     let uploaded = false;
     worker.use(
