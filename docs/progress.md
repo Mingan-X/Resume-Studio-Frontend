@@ -8,6 +8,13 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.1-T1 简历契约与接口（feature/f2.1-resumes，进行中）
+
+- fetch后端确认S2.1–S3.3均已合并，origin/develop为b2104ea374ba6bc9f1da799033c7f37d5ab80153；已读handoff-frontend-s33及相关契约。普通任务串行推进，不使用goal或子代理。
+- 快照按该SHA的docs/openapi.json复制，SOURCE同步，独立提交aa69756；新增简历游标列表、双ID版本详情、XHR上传mutation与Query key/精确失效、生成Schema夹具。失败重试复用键，重新选文件换键；重复提交和成功后重复操作被阻止。错误对象保留生成契约reason/details。
+- 基础检查全部通过：typecheck、Lint、67项单元/组件/契约、build；独立契约5项通过。首次Lint碰到新增测试文件未格式化，格式化后通过。未改页面，E2E及真实上传在T2–T5执行。无新依赖。
+- 契约缺口：简历列表仅id/latestVersionId/version/createdAt，无文件显示名和解析状态；按§6记录并跳过缺字段展示，不补造类型。详情API需要resumeId/versionId，既有/resumes/:resumeId页面以经Zod校验的versionId查询参数承载版本，保持刷新可复现。上传成功才写入解析产物；原文件名仅能在本次选择区域显示。
+
 ## 2026-11-27 F1.3-T5 阶段交付与F2.1门禁（feature/f1.3-contract-tasks，待验收）
 
 - README、架构、API对接和测试文档同步生成契约、轮询/取消、真实冒烟前置及测试隔离边界；路线图F1.3待验收。复核界面规范时修正重试时间为本地时区YYYY-MM-DD HH:mm，避免locale改变分隔符，格式断言通过。

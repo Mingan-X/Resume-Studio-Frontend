@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import type { ErrorResponse } from '@/generated/types.gen';
 import { zErrorResponse } from '@/generated/zod.gen';
 
 // 后端允许兼容新增错误码；结构来自生成Schema，未知code走通用处理。
@@ -12,6 +13,8 @@ export interface ErrorOptions {
   retryable: boolean;
   requestId?: string | undefined;
   status?: number | undefined;
+  reason?: ErrorResponse['reason'];
+  details?: ErrorResponse['details'];
 }
 export class AppError extends Error {
   readonly kind: ErrorKind;
@@ -19,6 +22,8 @@ export class AppError extends Error {
   readonly retryable: boolean;
   readonly requestId: string | undefined;
   readonly status: number | undefined;
+  readonly reason: ErrorResponse['reason'];
+  readonly details: ErrorResponse['details'];
   constructor(options: ErrorOptions) {
     super(options.message);
     this.name = 'AppError';
@@ -27,6 +32,8 @@ export class AppError extends Error {
     this.retryable = options.retryable;
     this.requestId = options.requestId;
     this.status = options.status;
+    this.reason = options.reason;
+    this.details = options.details;
   }
 }
 export function httpError(body: unknown, status: number, requestId?: string | null): AppError {
@@ -38,6 +45,8 @@ export function httpError(body: unknown, status: number, requestId?: string | nu
     retryable: parsed.success && parsed.data.retryable,
     requestId: requestId || (parsed.success ? parsed.data.requestId : undefined),
     status,
+    reason: parsed.success ? parsed.data.reason : undefined,
+    details: parsed.success ? parsed.data.details : undefined,
   });
 }
 export function transportError(timedOut: boolean, aborted: boolean): AppError {
