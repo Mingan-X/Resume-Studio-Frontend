@@ -6,6 +6,12 @@ import { jobFixture, jobId, jobVersionId } from './fixtures/jobs';
 export function jobFlowHandlers() {
   let current = structuredClone(jobFixture);
   return [
+    http.get('*/api/v1/jobs', () =>
+      HttpResponse.json({
+        items: [{ id: current.jobId, createdAt: current.createdAt, latestVersion: current }],
+        nextCursor: null,
+      }),
+    ),
     http.get('*/api/v1/jobs/:jobId', () => HttpResponse.json(current)),
     http.get('*/api/v1/jobs/:jobId/versions/:versionId', () => HttpResponse.json(current)),
     http.post('*/api/v1/jobs', async ({ request }) => {
@@ -69,6 +75,23 @@ export function jobFlowHandlers() {
           break;
       }
       return HttpResponse.json(current);
+    }),
+    http.post('*/api/v1/jobs/:jobId/versions/:versionId/confirm', () => {
+      current = { ...current, hardRequirementsConfirmed: true, weightsConfirmed: true };
+      return HttpResponse.json(current);
+    }),
+    http.post('*/api/v1/jobs/:jobId/versions/:versionId/publish', () => {
+      current = {
+        ...current,
+        status: 'PUBLISHED',
+        indexStatus: 'PENDING',
+        publishedAt: '2026-11-28T00:00:00.000Z',
+        contentHash: 'b'.repeat(64),
+      };
+      return HttpResponse.json(
+        { jobVersionId: current.id, taskId: '30000000-0000-4000-8000-000000000004' },
+        { status: 202 },
+      );
     }),
     http.post('*/api/v1/jobs/:jobId/versions/:versionId/suggestions', () =>
       HttpResponse.json(
