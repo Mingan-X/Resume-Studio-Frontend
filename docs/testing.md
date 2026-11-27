@@ -41,6 +41,8 @@ E2E与生成/源码修改串行执行：Vite热更新会重载页面，影响停
 
 ## 3. 必须覆盖的行为
 
+报告规则证据：contracts/reports校验合成快照；ReportSummary覆盖PARTIAL/revision来源；StructuredResume/EvidenceList覆盖缺失/文本/来源映射；radar/Profile覆盖unknown不绘零与等价表格；Recommendations/EligibilityGroups覆盖原值/顺序/资格/未执行；e2e/reports覆盖刷新、重开、HTML、跨页锚点及展示规则。真实模型报告按延后表，非模型真实组只核对404等接口边界，不能代替真实报告验证。
+
 每个功能任务的验收条件至少对应一个测试。下列行为无论在哪个任务中实现都必须有测试：
 
 - 错误处理：后端错误体、网络失败、超时、响应不符合Schema四种情况分别得到正确的 `AppError.kind` 与界面提示，并显示requestId。
