@@ -25,6 +25,9 @@ test('重算生成新revision并保留原报告', async ({ page }) => {
   await page.getByRole('link', { name: '查看原报告' }).click();
   await expect(page.locator('main')).toContainText('报告版本 1');
   await expect(page.getByRole('region', { name: '推荐岗位' })).toContainText('63.47分');
+  await page.getByRole('navigation').getByRole('link', { name: '报告历史', exact: true }).click();
+  await expect(page.getByRole('region', { name: '报告版本历史' })).toContainText('版本 2');
+  await expect(page.getByRole('region', { name: '报告版本历史' })).toContainText('初始报告');
 });
 
 test('报告展示规则：原始分数、缺证据、PARTIAL、不补推荐、资格分区与安全证据', async ({ page }) => {
