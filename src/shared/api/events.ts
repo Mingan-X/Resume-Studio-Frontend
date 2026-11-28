@@ -11,6 +11,7 @@ export interface EventOptions<T> {
   onError?: (error: AppError) => void;
   maxFailures?: number;
   reconnectDeadlineMs?: number;
+  eventName?: string;
 }
 export function subscribeEvents<T>(path: string, options: EventOptions<T>): () => void {
   let source: EventSource;
@@ -38,7 +39,7 @@ export function subscribeEvents<T>(path: string, options: EventOptions<T>): () =
     clearTimeout(timer);
     timer = undefined;
   };
-  source.onmessage = (event) => {
+  const handleMessage = (event: MessageEvent) => {
     if (stopped) return;
     let value: unknown;
     try {
@@ -56,6 +57,11 @@ export function subscribeEvents<T>(path: string, options: EventOptions<T>): () =
     }
     options.onData(parsed.data, z.string().parse(event.lastEventId));
   };
+  if (options.eventName)
+    source.addEventListener(options.eventName, (event) => {
+      if (event instanceof MessageEvent) handleMessage(event);
+    });
+  else source.onmessage = handleMessage;
   source.onerror = () => {
     if (stopped) return;
     failures++;

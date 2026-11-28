@@ -11,6 +11,25 @@ test('真实后端合成任务终态和计数可查询', async ({ page }) => {
   await expect(page.getByText('合成任务完成', { exact: true })).toBeVisible();
 });
 
+test('真实持久SSE可按Last-Event-ID补读，终态读完返回204', async ({ request }) => {
+  const taskId = z.uuid().parse(process.env.SMOKE_SUCCEEDED_TASK_ID);
+  const first = await request.get(`/api/v1/tasks/${taskId}/events`);
+  expect(first.status()).toBe(200);
+  expect(first.headers()['content-type']).toContain('text/event-stream');
+  const content = await first.text();
+  expect(content).toContain('event: task');
+  const ids = [...content.matchAll(/^id: (\d+)$/gm)].map((match) =>
+    z.coerce.number().int().positive().parse(match[1]),
+  );
+  expect(ids.length).toBeGreaterThan(0);
+  const last = ids.at(-1);
+  if (!last) throw new Error('missing event id');
+  const resumed = await request.get(`/api/v1/tasks/${taskId}/events`, {
+    headers: { 'Last-Event-ID': String(last) },
+  });
+  expect(resumed.status()).toBe(204);
+});
+
 test('真实取消请求持久化，安全边界终态由后端提交', async ({ page, request }) => {
   const taskId = z.uuid().parse(process.env.SMOKE_QUEUED_TASK_ID);
   await page.goto(`/tasks/${taskId}`);

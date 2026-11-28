@@ -4,6 +4,8 @@
 
 ## 1. 当前可对接的接口
 
+F2.5已接入POST reports/:id/recompute、GET reports及revisions和任务SSE。重算从results.weightsSnapshot复制表单，输入变化换键、同输入重试复用键，后端返回新ID才跳转；原缓存不覆盖。历史按后端游标排序，sourceReportId明确链接。SSE事件名task，Last-Event-ID由同一原生连接恢复携带；前端去重不补序号、不把事件计数算成百分比。
+
 F2.4消费GET reports/:reportId不可变快照，按top10/pending/ineligible返回顺序显示，不用召回rank生成最终名次；number分数原样呈现，不取整补零。结构化简历/画像/逐项执行与证据来自content。用户请求原简历详情时，通过analyses/options分页查询实际版本映射再跳双ID详情；找不到保留报告内文本核对。预算/失败/未执行不转成unknown。真实模型报告内容仍延后。
 
 F2.3已接入GET analyses/options和POST analyses。简历选项由后端过滤为解析成功，corpus版本名/岗位数量/规则配置原样展示；两类游标分别分页，输入变更换幂等键。创建只消费taskId跳站内任务路由，不直接导航未经校验的URL。配置为null时提示不可创建。真实模型终态联调延后。

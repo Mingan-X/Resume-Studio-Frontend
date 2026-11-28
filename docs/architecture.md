@@ -137,7 +137,7 @@ F1.2实现：HTTP层承担最多两次重试，Vue Query关闭同一请求的额
 - S3.1提供SSE后改为订阅 `/api/v1/tasks/:taskId/events`。浏览器原生EventSource重连时会自动携带 `Last-Event-ID`；SSE断开超过重试上限时回退到轮询。
 - 进度只显示后端给出的阶段和计数，不做时间估算或等速动画。
 
-F1.3已验证轮询、四终态停止、页面隐藏暂停/取消当前请求及可见后恢复。取消使用原生确认对话框，202只提示请求已提交；INVALID_STATE刷新当前任务。任务失败展示的requestId来自GET响应头（任务error本身无此字段），与任务数据一起保存在Query缓存；不向后端契约拼装字段。SSE基础已存在，但尚未用于任务页。
+F2.5任务页首读快照后订阅原生EventSource的task事件，按taskId/seq/id校验过滤重复，再查询真实快照；保持原生重连的Last-Event-ID。连续3次失败、10秒重连期限或CLOSED时回退2秒轮询，间隔显式computed响应。隐藏/卸载/四终态关闭连接，隐藏暂停查询；可见后重新获取快照。取消202只保存请求，最终状态以GET为准，INVALID_STATE刷新。requestId来自GET响应头，与task独立存在Query缓存，不向后端结构拼字段。
 
 ## 9. 安全
 

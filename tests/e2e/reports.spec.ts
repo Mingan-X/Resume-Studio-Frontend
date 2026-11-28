@@ -14,6 +14,22 @@ test('报告刷新与重新打开保持快照概要和PARTIAL', async ({ page })
   await expect(page.locator('main')).toHaveText(content, { useInnerText: true });
 });
 
+test('重算生成新revision并保留原报告', async ({ page }) => {
+  await page.goto(`/reports/${reportId}`);
+  const form = page.getByRole('region', { name: '调权重算' });
+  await form.locator('summary').first().click();
+  await form.getByLabel('技术深度', { exact: true }).first().fill('2.5');
+  await form.getByRole('button', { name: '生成新报告版本' }).click();
+  await expect(page).toHaveURL(/40000000-0000-4000-8000-000000000099$/);
+  await expect(page.locator('main')).toContainText('报告版本 2');
+  await page.getByRole('link', { name: '查看原报告' }).click();
+  await expect(page.locator('main')).toContainText('报告版本 1');
+  await expect(page.getByRole('region', { name: '推荐岗位' })).toContainText('63.47分');
+  await page.getByRole('navigation').getByRole('link', { name: '报告历史', exact: true }).click();
+  await expect(page.getByRole('region', { name: '报告版本历史' })).toContainText('版本 2');
+  await expect(page.getByRole('region', { name: '报告版本历史' })).toContainText('初始报告');
+});
+
 test('报告展示规则：原始分数、缺证据、PARTIAL、不补推荐、资格分区与安全证据', async ({ page }) => {
   await page.goto(`/reports/${reportId}`);
   const recommendations = page.getByRole('region', { name: '推荐岗位' }),

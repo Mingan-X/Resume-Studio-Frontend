@@ -35,7 +35,13 @@ try {
   };
   const child = spawn(
     process.execPath,
-    [path.join(root, 'node_modules/@playwright/test/cli.js'), 'test', '--project=real'],
+    [
+      path.join(root, 'node_modules/@playwright/test/cli.js'),
+      'test',
+      '--project=real',
+      'health.smoke.spec.ts',
+      'tasks.smoke.spec.ts',
+    ],
     { cwd: root, env, stdio: 'inherit' },
   );
   const [code] = await once(child, 'exit');
