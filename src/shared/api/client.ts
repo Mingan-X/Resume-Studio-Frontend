@@ -10,6 +10,7 @@ export interface RequestOptions {
   timeoutMs?: number;
   retries?: number;
   onRequestId?: (requestId: string | undefined) => void;
+  headers?: Record<string, string>;
 }
 export function apiUrl(path: string): string {
   if (path === '/health') return path;
@@ -55,7 +56,7 @@ export async function apiRequest<T>(
     const timeout = AbortSignal.timeout(options.timeoutMs ?? 15000);
     const signal = options.signal ? AbortSignal.any([options.signal, timeout]) : timeout;
     try {
-      const headers = new Headers({ Accept: 'application/json' });
+      const headers = new Headers({ Accept: 'application/json', ...options.headers });
       if (options.body !== undefined) headers.set('Content-Type', 'application/json');
       if (options.idempotencyKey) headers.set('Idempotency-Key', options.idempotencyKey);
       const response = await fetch(url, {
