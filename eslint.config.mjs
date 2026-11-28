@@ -27,6 +27,8 @@ export default defineConfigWithVueTs(
         AbortSignal: 'readonly',
         fetch: 'readonly',
         setTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
       },
     },
   },
