@@ -2,6 +2,7 @@ import type { z } from 'zod';
 
 import { apiUrl } from './client';
 import { contractError, httpError, transportError } from './errors';
+import { notifyAuthFailure } from './sessionContext';
 
 export interface UploadOptions {
   signal?: AbortSignal;
@@ -40,7 +41,9 @@ export function uploadRequest<T>(
         value = null;
       }
       if (xhr.status < 200 || xhr.status >= 300) {
-        reject(httpError(value, xhr.status, requestId));
+        const error = httpError(value, xhr.status, requestId);
+        notifyAuthFailure(error, path);
+        reject(error);
         return;
       }
       const result = schema.safeParse(value);

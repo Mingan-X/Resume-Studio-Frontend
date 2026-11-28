@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { AppError, contractError, httpError, transportError } from './errors';
+import { notifyAuthFailure } from './sessionContext';
 
 export interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -74,7 +75,11 @@ export async function apiRequest<T>(
       options.onRequestId?.(requestId);
       const body: unknown = await response.json().catch(() => null);
       if (signal.aborted) throw transportError(timeout.aborted, options.signal?.aborted ?? false);
-      if (!response.ok) throw httpError(body, response.status, requestId);
+      if (!response.ok) {
+        const error = httpError(body, response.status, requestId);
+        notifyAuthFailure(error, path);
+        throw error;
+      }
       const parsed = schema.safeParse(body);
       if (!parsed.success) throw contractError(requestId);
       return parsed.data;

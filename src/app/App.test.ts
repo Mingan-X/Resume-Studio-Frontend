@@ -11,7 +11,9 @@ describe('工程入口', () => {
       routes: [{ path: '/resumes', component: { template: '<h1>简历</h1>' } }],
     });
     await router.push('/resumes');
-    const wrapper = mount(App, { global: { plugins: [router], stubs: { HealthStatus: true } } });
+    const wrapper = mount(App, {
+      global: { plugins: [router], stubs: { HealthStatus: true, SessionStatus: true } },
+    });
     expect(wrapper.text()).toContain('Resume Studio');
     expect(wrapper.text()).toContain('简历分析工作台');
     expect(wrapper.get('nav').findAll('a')).toHaveLength(4);

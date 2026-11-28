@@ -1,8 +1,10 @@
+import type { QueryClient } from '@tanstack/vue-query';
+import type { Pinia } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { installGuards } from './guards';
 
-export function createApplicationRouter() {
+export function createApplicationRouter(client: QueryClient, pinia: Pinia) {
   const pages: { path: string; title: string }[] = [];
   const router = createRouter({
     history: createWebHistory(),
@@ -63,6 +65,6 @@ export function createApplicationRouter() {
       },
     ],
   });
-  installGuards(router);
+  installGuards(router, client, pinia);
   return router;
 }

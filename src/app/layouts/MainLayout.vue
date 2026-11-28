@@ -3,7 +3,11 @@ import { ElButton } from 'element-plus';
 import { ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 
+import { SessionStatus } from '@/features/auth';
 import { HealthStatus } from '@/features/system';
+import ErrorNotice from '@/shared/ui/ErrorNotice.vue';
+
+import { accessError } from '../auth';
 
 const showHealth = ref(false);
 const navigation = [
@@ -19,7 +23,7 @@ const navigation = [
   <header>
     <RouterLink class="brand" to="/resumes">Resume Studio</RouterLink>
     <span>简历分析工作台</span>
-    <RouterLink to="/login">登录</RouterLink>
+    <SessionStatus />
   </header>
   <div class="workspace">
     <aside>
@@ -33,7 +37,7 @@ const navigation = [
       </ElButton>
     </aside>
     <main id="main-content" tabindex="-1">
-      <RouterView />
+      <ErrorNotice v-if="accessError" :error="accessError" /><RouterView v-else />
       <div v-if="showHealth" class="diagnostics"><HealthStatus /></div>
     </main>
   </div>
