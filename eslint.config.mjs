@@ -21,7 +21,12 @@ export default defineConfigWithVueTs(
   {
     files: ['scripts/**/*.mjs'],
     languageOptions: {
-      globals: { AbortController: 'readonly', fetch: 'readonly', setTimeout: 'readonly' },
+      globals: {
+        AbortController: 'readonly',
+        AbortSignal: 'readonly',
+        fetch: 'readonly',
+        setTimeout: 'readonly',
+      },
     },
   },
   vue.configs['flat/essential'],

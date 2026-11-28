@@ -25,6 +25,7 @@ function collect(key) {
 }
 // 初始重定向/resumes的入口与懒加载页；其他业务页的动态块不计首屏。
 collect('index.html');
+collect('src/app/createApplication.ts');
 collect('src/pages/ResumesPage.vue');
 const chunks = [];
 for (const key of visited) {

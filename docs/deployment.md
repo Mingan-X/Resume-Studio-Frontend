@@ -33,13 +33,13 @@ F3.1会话联调已在本机独立HTTPS测试入口验证。生产需真实受�
 
 | 响应头 | 值 |
 |---|---|
-| `Content-Security-Policy` | `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'` |
+| `Content-Security-Policy` | `default-src 'self'; script-src 'self'; style-src 'self'; style-src-elem 'self'; style-src-attr 'none'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'` |
 | `X-Content-Type-Options` | `nosniff` |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` |
 | `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` |
 | `Strict-Transport-Security` | 启用TLS后设置，`max-age=31536000` |
 
-`style-src 'unsafe-inline'` 是因为Element Plus与ECharts会写入内联样式；F3.2实测能否改用更窄的规则，结论写回本文。
+F3.2本机实际nginx+生产构建页面实测已移除unsafe-inline，style属性none下登录/简历/岗位/分析/报告及SVG图表无CSP违规。Zod默认动态函数探测触发eval违规，采用官方jitless并先配置再动态装配应用解决；未放宽script-src。当前按需使用的UI组件范围验证通过，未来新增组件必须继续跑CSP专项。配置在[安全头](../deploy/security-headers.conf)及[代理路由](../deploy/locations.conf)。HSTS仅TLS生产模板启用，本机HTTP专项不声称验证了HSTS。
 
 ## 4. 缓存与路由回退
 

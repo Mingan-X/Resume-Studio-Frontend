@@ -8,6 +8,13 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.2-T5 nginx安全响应头与CSP实测（feature/f3.2-quality）
+
+- 从nginx.org官方HTTPS下载Windows稳定1.30.8，zip SHA256 ccd0c03ff665d4534e6595e455624ededc9eeb11a81a6a128920fcc928be1151；仅本机8088/8089与本次API进程。生产dist与真实nginx配置语法/响应头/缓存/SPA/真实后端未知API404验证通过，页面业务数据用合成路由夹具。
+- 3项部署浏览器检查通过：报告/图表、其他已实现页面和表单、严格样式试验0违规。CSP移除全部unsafe-inline/unsafe-eval，style-src-attr none；Zod官方jitless先于Schema装配。主入口启动分块改变后预算脚本计入createApplication动态启动块，首屏gzip104800字节，仍低于300KiB。
+- 失败：独立nginx前缀缺temp目录导致语法检查失败，创建专用temp后通过；首次CSP实际捕获Zod eval探测，设置jitless但导入排序过晚仍失败，改bootstrap动态装配后0违规。类型检查拒绝webServer显式undefined，改空数组；脚本AbortSignal全局声明补齐。没有关闭浏览器安全策略、修改系统代理或停止既有服务。
+- Lint/typecheck与构建通过。生产TLS/HSTS和目标环境验证仍延后；本地HTTP专项不替代。nginx测试日志在忽略.smoke-runs保留，进程均已停止。
+
 ## 2026-11-28 F3.2-T4 构建体积与预算（feature/f3.2-quality）
 
 - build manifest与递归依赖测量入口/resumes，首屏JS gzip103501字节，小于300KiB（307200字节），保留预算并在CI构建后强制检查。报告图表独立动态块；不把体积当生产时延。

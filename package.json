@@ -25,7 +25,8 @@
     "test:smoke:jobs": "pnpm run api:generate && node scripts/runJobSmoke.mjs",
     "test:smoke:analyses": "pnpm run api:generate && node scripts/runAnalysisSmoke.mjs",
     "test:smoke:auth": "pnpm run api:generate && node scripts/runAuthSmoke.mjs",
-    "build:analyze": "pnpm run build && node scripts/analyzeBuild.mjs"
+    "build:analyze": "pnpm run build && node scripts/analyzeBuild.mjs",
+    "test:deployment": "node scripts/runDeploymentChecks.mjs"
   },
   "dependencies": {
     "@tanstack/vue-query": "5.108.4",
