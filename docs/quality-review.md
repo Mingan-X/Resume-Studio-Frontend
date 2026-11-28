@@ -10,6 +10,12 @@
 
 ## 证据入口
 
+## 构建预算
+
+生产manifest递归核对index.html及/resumes路由的静态依赖，去重后首屏JS gzip为103501字节（约101.08KiB），门槛307200字节（300KiB）；保留起点预算并纳入CI。报告图表在独立动态块，不计初始简历页下载。测量脚本使用Node gzip默认设置，构建工具报告的压缩等级可能略有差异。此为资源体积，不是实际用户网络时延或生产性能保证。
+
+`pnpm run build:analyze`输出dist/build-analysis.json，列出每个计入块；预算超限非零退出。首次使用src/main.ts查manifest失败，按实际Vite入口index.html修正后通过。
+
 - 自动化与键盘：[accessibility.spec.ts](../tests/e2e/accessibility.spec.ts)
 - 字段错误关联：[FieldError.test.ts](../src/shared/ui/FieldError.test.ts)
 - 原始测试与失败记录：[progress.md](progress.md)

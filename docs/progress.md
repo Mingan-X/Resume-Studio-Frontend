@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.2-T4 构建体积与预算（feature/f3.2-quality）
+
+- build manifest与递归依赖测量入口/resumes，首屏JS gzip103501字节，小于300KiB（307200字节），保留预算并在CI构建后强制检查。报告图表独立动态块；不把体积当生产时延。
+- `pnpm run build:analyze`构建通过，首次分析因入口key误用src/main.ts失败，修正实际index.html后分析通过；Lint通过。明细在dist/build-analysis.json（不提交），解释见quality-review。无依赖变动。
+
 ## 2026-11-28 F3.2-T3 可访问性核对（feature/f3.2-quality）
 
 - 加入axe4.14.1开发依赖，registry engines/peers与官方README核对、冻结安装通过。10页面自动WCAG规则0违规；768px键盘跳内容/焦点/无横向溢出验证通过，专项11项。

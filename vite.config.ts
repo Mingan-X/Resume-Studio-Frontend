@@ -18,7 +18,7 @@ export default defineConfig(({ command, mode }) => {
       ...(command === 'serve' && mode === 'e2e' ? [transportProbePlugin(), sseProbePlugin()] : []),
     ],
     resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
-    build: { sourcemap: false },
+    build: { sourcemap: false, manifest: true },
     server: {
       proxy: {
         '/api': { target: 'http://127.0.0.1:3000', changeOrigin: false },
