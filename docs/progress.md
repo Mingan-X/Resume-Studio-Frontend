@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.5-T2 报告历史（feature/f2.5-revisions）
+
+- /reports列表与报告内同分析revisions列表均按游标分页，显示时间/状态/revision/来源链接；不覆盖原报告或重排后端结果。
+- typecheck、Lint、105项测试、build、22项E2E通过。分页组件验证两页与来源关系，重算E2E仍可回原版本。首次测试把MSW Request.url误写为函数，类型检查拒绝，改属性后通过；无标准放宽。
+
 ## 2026-11-28 F2.5-T1 调权重算（feature/f2.5-revisions，进行中）
 
 - F2.4已合并并推送develop93b1188；F2.5前fetch后端b2104ea并核验S3.1。权重从每个候选的weightsSnapshot复制到表单，维度/要求权重只校验有限非负，提交后使用后端新report.id跳转，原缓存/报告不变，来源revision可回看。字段details映射到对应输入，未保存提醒。

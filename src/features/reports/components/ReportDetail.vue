@@ -3,6 +3,7 @@ import RequestState from '@/shared/ui/RequestState.vue';
 
 import { useReport } from '../api/useReport';
 import EligibilityGroups from './EligibilityGroups.vue';
+import ReportHistory from './ReportHistory.vue';
 import ReportProfile from './ReportProfile.vue';
 import ReportRecommendations from './ReportRecommendations.vue';
 import ReportRecompute from './ReportRecompute.vue';
@@ -20,7 +21,7 @@ const query = useReport(() => props.reportId);
         :content="query.data.value.content"
       /><EligibilityGroups :content="query.data.value.content" /><ReportRecompute
         :report="query.data.value"
-      /></div
+      /><ReportHistory :report-id="query.data.value.id" /></div
   ></RequestState>
 </template>
 <style scoped>
