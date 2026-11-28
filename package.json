@@ -24,7 +24,11 @@
     "test:smoke:resumes": "pnpm run api:generate && node scripts/runResumeSmoke.mjs",
     "test:smoke:jobs": "pnpm run api:generate && node scripts/runJobSmoke.mjs",
     "test:smoke:analyses": "pnpm run api:generate && node scripts/runAnalysisSmoke.mjs",
-    "test:smoke:auth": "pnpm run api:generate && node scripts/runAuthSmoke.mjs"
+    "test:smoke:auth": "pnpm run api:generate && node scripts/runAuthSmoke.mjs",
+    "build:analyze": "pnpm run build && node scripts/analyzeBuild.mjs",
+    "test:deployment": "node scripts/runDeploymentChecks.mjs",
+    "test:rollback": "node scripts/rollbackDrill.mjs",
+    "audit:production": "node scripts/auditProduction.mjs"
   },
   "dependencies": {
     "@tanstack/vue-query": "5.108.4",
@@ -37,6 +41,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.1",
     "@eslint/js": "10.0.1",
     "@hey-api/openapi-ts": "0.99.0",
     "@playwright/test": "1.65.1",

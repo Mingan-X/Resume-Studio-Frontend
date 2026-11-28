@@ -165,12 +165,18 @@ try {
           headers: req.headers,
         },
         (response) => {
+          response.on('error', () => res.destroy());
+          res.on('close', () => {
+            response.destroy();
+            upstream.destroy();
+          });
           res.writeHead(response.statusCode ?? 502, response.headers);
           response.pipe(res);
         },
       );
       upstream.on('error', () => {
-        res.writeHead(502);
+        if (res.destroyed) return;
+        if (!res.headersSent) res.writeHead(502);
         res.end();
       });
       req.pipe(upstream);
@@ -178,14 +184,17 @@ try {
     },
   );
   await new Promise((resolve) => proxy.listen(4443, '127.0.0.1', resolve));
+  const keepalive = setInterval(() => {}, 1000);
   process.send?.({ type: 'ready', username, runRoot });
   process.on('message', async (message) => {
     if (message?.type !== 'stop') return;
     try {
       await finish();
+      clearInterval(keepalive);
       process.send?.({ type: 'cleaned' });
       process.disconnect();
     } catch {
+      clearInterval(keepalive);
       process.exitCode = 1;
       process.send?.({ type: 'failed', code: 'CLEANUP_UNCONFIRMED' });
       process.disconnect();

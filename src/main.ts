@@ -1,3 +1,3 @@
-import { mountApplication } from './app/createApplication';
+import { bootstrap } from './app/bootstrap';
 
-void mountApplication();
+void bootstrap();

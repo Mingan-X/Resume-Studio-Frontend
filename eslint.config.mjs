@@ -15,13 +15,21 @@ export default defineConfigWithVueTs(
       'playwright-report/**',
       'test-results/**',
       'tests/mocks/public/**',
+      '.smoke-runs/**',
     ],
   },
   js.configs.recommended,
   {
     files: ['scripts/**/*.mjs'],
     languageOptions: {
-      globals: { AbortController: 'readonly', fetch: 'readonly', setTimeout: 'readonly' },
+      globals: {
+        AbortController: 'readonly',
+        AbortSignal: 'readonly',
+        fetch: 'readonly',
+        setTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+      },
     },
   },
   vue.configs['flat/essential'],

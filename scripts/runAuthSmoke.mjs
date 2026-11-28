@@ -35,7 +35,11 @@ execFileSync(
   { stdio: 'ignore' },
 );
 const fixture = fork(path.join(root, 'scripts/backendAuthFixture.mjs'), [runRoot], {
-  stdio: ['ignore', 'ignore', 'ignore', 'ipc'],
+  stdio: ['ignore', 'ignore', 'pipe', 'ipc'],
+});
+let diagnostic = '';
+fixture.stderr?.on('data', (chunk) => {
+  diagnostic = (diagnostic + chunk.toString()).slice(-20000);
 });
 let ready = false;
 try {
@@ -92,5 +96,11 @@ try {
         console.log('合成账号、会话、业务数据及临时TLS文件已清理。');
       }
     }
-  } else if (fixture.exitCode === null) fixture.kill();
+  } else {
+    process.exitCode = 1;
+    console.error('Fixture exited before cleanup confirmation; safe error classes:', [
+      ...new Set(diagnostic.match(/ERR_[A-Z_]+|[A-Za-z]+Error/g) ?? []),
+    ]);
+    if (fixture.exitCode === null) fixture.kill();
+  }
 }

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
 import { apiRequest, apiUrl } from './client';
-import { AppError, normalizeError } from './errors';
+import { AppError, contractError, httpError, normalizeError } from './errors';
 import { setCsrf } from './sessionContext';
 
 const schema = z.object({ value: z.string() });
@@ -15,6 +15,16 @@ function mockFetch() {
 }
 
 describe('HTTP边界与重试', () => {
+  it('错误响应头也须UUID校验，非法头不能覆盖合法正文requestId', () => {
+    expect(
+      httpError(
+        { code: 'NOT_FOUND', message: '无权访问', retryable: false, requestId },
+        404,
+        'invalid-header',
+      ).requestId,
+    ).toBe(requestId);
+    expect(contractError('invalid-header').requestId).toBeUndefined();
+  });
   it('CSRF仅附于写请求，GET不附头且不读取Cookie', async () => {
     setCsrf('a'.repeat(64));
     const fetcher = mockFetch().mockImplementation(async () => Response.json({ value: 'ok' }));

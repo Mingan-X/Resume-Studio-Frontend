@@ -35,6 +35,10 @@ Resume Studio 需要一个面向求职者的Web界面：上传简历、管理岗
 
 ## 方案比较
 
+### F3.2-T3 可访问性检查依赖（2026-11-28）
+
+@axe-core/playwright 4.14.1（开发依赖）配合既有Playwright执行WCAG规则检查；registry核对Node>=22.12、playwright-core>=1，已读官方包README的AxeBuilder/analyze用法。替代仅人工核查的遗漏风险，成本为开发/CI安装，不进入生产包；人工键盘/焦点/读屏仍需独立记录，自动零违规不等于认证WCAG全部满足。
+
 ### F2.4-T4 实际安装（2026-11-28）
 
 ECharts 6.1.0，registry精确版本及engines/peers核对（无额外peer要求），读取Apache官方包README及Radar坐标实现确认默认逆时针轴方向。沿用已定图表方向，直接echarts/core按需注册Radar/Graphic/SVG，替代引入vue-echarts包装；成本仅报告懒加载块。图形只映射后端分值到坐标，unknown不绘点不跨轴连线，不使用null被当0的雷达数据；等价表格完整保留。冻结安装及实际构建/E2E通过，新增锁文件同步。

@@ -8,6 +8,66 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.2-T8 远端CI确认（feature/f3.2-quality，待验收）
+
+- 分支提交f6360121bcccb04a199a4e5a9c3ca4acec4d7df9已推送，[GitHub Actions 46099032445](https://github.com/Mingan-X/Resume-Studio-Frontend/actions/runs/46099032445)实际success：冻结安装、typecheck、Lint、单元/组件/契约、build、首屏预算、生产产物审计、Chromium与完整E2E全部通过。
+- 本记录仅追加远端证据，源码/测试/构建配置未变；随后按no-ff合并develop并推送，统一验收边界保持上文记录。main和后端文件不操作。
+
+## 2026-11-28 F3.2-T8 最终文档与交接（feature/f3.2-quality，待验收）
+
+- F1.1–F3.2全部可执行任务完成并分任务记录，F3.2标待验收；README、架构、测试、部署、quality-review明确当前能力、契约缺口、人工/真实模型/目标环境边界。后端最终仍b2104ea且工作区干净，前端main仍0e81261，未操作main/master。
+- 最终串行冻结安装、typecheck、零警告Lint、118项单元/组件/契约、build:analyze、产物审计、9项契约专项通过；首屏JS gzip104831字节<307200预算。35项MSW/可访问性/传输E2E全部通过，nginx3项与本地A→B→A回滚通过。53处本地链接/锚点及git diff --check通过。
+- 真实冒烟最终：简历4项、岗位1项、分析/报告非模型3项、任务/SSE4项通过且本轮清理有凭据；HTTPS3项最新重跑通过且取得清理凭据，旧两轮更正见下条。所有本轮辅助nginx/API夹具进程均已退出，Docker服务未停止。远端CI待推送后另记，不把本地结果代替远端。
+- 延后：F2.3-T4/F2.4-T7/F2.5-T4/F3.2-T2依赖真实模型的终态/报告/重算链路；F3.2-T6目标服务器镜像/TLS/HSTS/部署回滚。人工缺口：真实读屏听读未运行；不声称AA认证。契约缺口：简历列表显示名/解析状态、最终名次数字/固定尾零展示字段缺失，按§6跳过而不补造。诊断文件/旧匿名会话清理限制见quality-review和下条。
+- 阶段分支与develop按no-ff合并推送后统一验收；不存在生产发布或main合并授权的执行，未执行。全部工作为普通任务，未使用goal工具/子代理，安装/构建/测试串行。
+
+## 2026-11-28 F3.2-T2/T8 HTTPS清理凭据更正（feature/f3.2-quality）
+
+- 最终核查发现T2的HTTPS扩展轮次与首次最终回归虽然3项页面测试通过，但夹具提前退出，runner未把“无清理确认”判失败；两个manifest仍active。因此T2关于该轮精确清理的概括不成立，按本条更正，旧记录保留。
+- 夹具补代理响应关闭/错误收束、显式保活到清理，runner提前退出一律非零并只记录安全错误类型；新一轮真实HTTPS3项通过且明确清理凭据、账号/会话/业务数据/临时目录均成功。原提前退出根因未得到直接异常记录，不宣称已定位底层原因。
+- 旧auth-2XtTJf与auth-II7RTp确认夹具PID已不存在；按两个manifest的精确accountId/ownerId核验账号前缀、ResourceOperation无未停止、taskAttempt=0，核验项目归属后清理该两owner全部业务及账号关联会话，核对owner为0并写cleaned。文件目录保留诊断；原轮次匿名会话hash未保留，无法精确确认即时物理清理，不批量删其他匿名会话，依后端过期策略处理。
+- auth-Wzin4r删除曾被自动审批拒绝，仍保留不绕过。无后端文件/配置/迁移改动，未停止Docker或其他服务。
+
+## 2026-11-28 F3.2-T2/T8 最终故障边界复核（feature/f3.2-quality）
+
+- 发现发布成功但响应丢失后的手工重试会再次confirm，可能被已发布状态409阻断；现同一内容已确认则直接复用原publish键，用户修改内容才重置确认和键。新增三次503后手工恢复断言confirm仅1次、所有publish同键。
+- 错误头requestId也经UUID校验，非法头不能覆盖合法正文编号；没有用断言代替输入校验。typecheck、Lint、118项测试、build通过。最终页面/真实发布回归接续T8运行。
+
+## 2026-11-28 F3.2-T7 生产错误监控决定与产物核对（feature/f3.2-quality）
+
+- FD2保持首版无生产错误监控，开发仅kind/requestId；产物审计脚本与CI检查无公开sourcemap、测试凭证、MSW worker或已知第三方上报端点。部署文档明确边界，不把静态审计称安全认证。
+- 核对发现Vue Query保留mutation变量，登录完成/失败后finally擦除临时password引用，避免失败缓存长期保留口令。Cookie仍不读取，CSRF仅内存。
+- typecheck、Lint、116项测试、build、audit:production通过。生产网络/CSP实测见T5，后续最终回归再运行登录/页面流程；无新增监控依赖或第三方通信。
+
+## 2026-11-28 F3.2-T6 部署覆盖配置与本地回滚（feature/f3.2-quality）
+
+- 提供与后端release Compose叠加的frontend覆盖，只替换既有proxy模板/安全头/路由挂载，envsubst限定PUBLIC_HOST；不改后端文件。正式发布/不可变dist目录/旧assets保留/回滚步骤写deployment，要求受信TLS及核验digest。
+- Compose合并config --quiet通过（合成占位仅语法，不pull/build/up）。完整TLS模板最初80端口绑定被Windows拒绝，改成本轮loopback18080/18443后nginx -t通过；没有占用生产端口或改防火墙。真实nginx8090用两份生产产物A→B→A回滚演练通过，原dist不变、本轮进程已退出。
+- Lint首次扫描本轮回滚复制的minified dist得到大量产物错误，将.smoke-runs与dist一样明确排除后零警告通过，源码规则不变。目标服务器TLS/HSTS/镜像核验、Compose启动及目标回滚演练按既定F3.2-T6延后；本机演练不替代目标验收。
+
+## 2026-11-28 F3.2-T5 nginx安全响应头与CSP实测（feature/f3.2-quality）
+
+- 从nginx.org官方HTTPS下载Windows稳定1.30.8，zip SHA256 ccd0c03ff665d4534e6595e455624ededc9eeb11a81a6a128920fcc928be1151；仅本机8088/8089与本次API进程。生产dist与真实nginx配置语法/响应头/缓存/SPA/真实后端未知API404验证通过，页面业务数据用合成路由夹具。
+- 3项部署浏览器检查通过：报告/图表、其他已实现页面和表单、严格样式试验0违规。CSP移除全部unsafe-inline/unsafe-eval，style-src-attr none；Zod官方jitless先于Schema装配。主入口启动分块改变后预算脚本计入createApplication动态启动块，首屏gzip104800字节，仍低于300KiB。
+- 失败：独立nginx前缀缺temp目录导致语法检查失败，创建专用temp后通过；首次CSP实际捕获Zod eval探测，设置jitless但导入排序过晚仍失败，改bootstrap动态装配后0违规。类型检查拒绝webServer显式undefined，改空数组；脚本AbortSignal全局声明补齐。没有关闭浏览器安全策略、修改系统代理或停止既有服务。
+- Lint/typecheck与构建通过。生产TLS/HSTS和目标环境验证仍延后；本地HTTP专项不替代。nginx测试日志在忽略.smoke-runs保留，进程均已停止。
+
+## 2026-11-28 F3.2-T4 构建体积与预算（feature/f3.2-quality）
+
+- build manifest与递归依赖测量入口/resumes，首屏JS gzip103501字节，小于300KiB（307200字节），保留预算并在CI构建后强制检查。报告图表独立动态块；不把体积当生产时延。
+- `pnpm run build:analyze`构建通过，首次分析因入口key误用src/main.ts失败，修正实际index.html后分析通过；Lint通过。明细在dist/build-analysis.json（不提交），解释见quality-review。无依赖变动。
+
+## 2026-11-28 F3.2-T3 可访问性核对（feature/f3.2-quality）
+
+- 加入axe4.14.1开发依赖，registry engines/peers与官方README核对、冻结安装通过。10页面自动WCAG规则0违规；768px键盘跳内容/焦点/无横向溢出验证通过，专项11项。
+- 人工核对补字段错误aria-invalid/aria-describedby关联与清理；typecheck、Lint、116项测试、build和a11y11项全部通过。核对记录见quality-review；真实读屏听读未执行，记录为人工验收缺口，未声称自动扫描等于AA认证。
+
+## 2026-11-28 F3.2-T2 可执行关键真实流程（feature/f3.2-quality，进行中）
+
+- F3.1已合并推送develop6595fc2；F3.2前fetch后端b2104ea，S3.3合并已核验。T1 CI已提前交付，不重复实施。
+- HTTPS真实组3项通过：登录/CSRF/退出、同源岗位要求确认发布→持久索引任务、PDF上传；非模型分析/报告边界组3项通过。各轮合成账号/会话/业务数据按精确owner清理，未启动模型或向量消费者。
+- 完整真实“分析→报告→重算→历史”依赖真实模型产物，按统一验收延后。工程MSW相关完整流程已在F2.x运行；不以合成报告假装真实质量验证。
+
 ## 2026-11-28 F3.1-T6 文档与交付（feature/f3.1-auth，待验收）
 
 - README、架构、API、测试和部署说明同步会话引导、CSRF内存、DEV边界及HTTPS前置，阶段待验收。最终115项测试、build、24项E2E与2项真实HTTPS通过；纯文档检查本地链接及diff，不重复数据库操作。T1–T6分别提交，no-ff集成推送。

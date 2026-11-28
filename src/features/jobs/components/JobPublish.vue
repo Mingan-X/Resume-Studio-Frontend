@@ -15,6 +15,23 @@ const confirm = useConfirmJobMutation(),
 const hard = ref(false),
   weights = ref(false),
   notice = ref('');
+const confirmed = ref(false);
+watch(
+  () =>
+    JSON.stringify([
+      props.job.id,
+      props.job.title,
+      props.job.city,
+      props.job.level,
+      props.job.skills,
+      props.job.document,
+      props.job.requirements,
+      props.job.dimensionWeights,
+    ]),
+  () => {
+    confirmed.value = false;
+  },
+);
 watch(
   () => props.job.id,
   () => {
@@ -26,15 +43,24 @@ watch(
 );
 const pending = computed(() => confirm.isPending.value || publish.isPending.value);
 async function publishJob() {
-  if (pending.value || !hard.value || !weights.value || props.job.status !== 'DRAFT') return;
+  if (
+    pending.value ||
+    !hard.value ||
+    !weights.value ||
+    (props.job.status !== 'DRAFT' && !confirmed.value)
+  )
+    return;
   if (!window.confirm('发布后此版本不可修改；后续修改会生成新草稿。确定发布岗位并创建索引任务？'))
     return;
   try {
-    const saved = await confirm.mutateAsync({
-      job: props.job,
-      body: { hardRequirementsConfirmed: true, weightsConfirmed: true },
-    });
-    emit('saved', saved);
+    if (!confirmed.value) {
+      const saved = await confirm.mutateAsync({
+        job: props.job,
+        body: { hardRequirementsConfirmed: true, weightsConfirmed: true },
+      });
+      emit('saved', saved);
+      confirmed.value = true;
+    }
     await publish.mutateAsync();
     notice.value = '岗位已发布，索引任务已创建。';
   } catch {
