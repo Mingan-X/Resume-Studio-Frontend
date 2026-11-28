@@ -75,7 +75,17 @@ export function usePublishJobMutation(job: MaybeRefOrGetter<JobVersion>) {
   const client = useQueryClient(),
     key = ref(crypto.randomUUID());
   watch(
-    () => toValue(job).id,
+    () =>
+      JSON.stringify([
+        toValue(job).id,
+        toValue(job).title,
+        toValue(job).city,
+        toValue(job).level,
+        toValue(job).skills,
+        toValue(job).document,
+        toValue(job).requirements,
+        toValue(job).dimensionWeights,
+      ]),
     () => {
       key.value = crypto.randomUUID();
     },

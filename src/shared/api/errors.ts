@@ -5,6 +5,7 @@ import { zErrorResponse } from '@/generated/zod.gen';
 
 // 后端允许兼容新增错误码；结构来自生成Schema，未知code走通用处理。
 const errorBodySchema = zErrorResponse.extend({ code: z.string() });
+const requestIdSchema = z.uuid().optional().catch(undefined);
 export type ErrorKind = 'http' | 'network' | 'contract' | 'aborted';
 export interface ErrorOptions {
   kind: ErrorKind;
@@ -43,7 +44,8 @@ export function httpError(body: unknown, status: number, requestId?: string | nu
     code: parsed.success ? parsed.data.code : 'INTERNAL_ERROR',
     message: parsed.success ? parsed.data.message : '服务暂不可用，请稍后重试。',
     retryable: parsed.success && parsed.data.retryable,
-    requestId: requestId || (parsed.success ? parsed.data.requestId : undefined),
+    requestId:
+      requestIdSchema.parse(requestId) ?? (parsed.success ? parsed.data.requestId : undefined),
     status,
     reason: parsed.success ? parsed.data.reason : undefined,
     details: parsed.success ? parsed.data.details : undefined,
@@ -70,7 +72,7 @@ export function contractError(requestId?: string | null): AppError {
     code: 'CONTRACT_ERROR',
     message: '服务响应格式异常，请稍后重试。',
     retryable: false,
-    requestId: requestId ?? undefined,
+    requestId: requestIdSchema.parse(requestId),
   });
 }
 export function normalizeError(error: unknown): AppError {
