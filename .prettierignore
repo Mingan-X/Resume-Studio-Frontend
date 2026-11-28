@@ -7,5 +7,6 @@ src/generated
 pnpm-lock.yaml
 contracts/openapi.json
 tests/mocks/public
+.smoke-runs
 docs
 *.md

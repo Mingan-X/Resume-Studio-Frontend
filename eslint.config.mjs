@@ -15,6 +15,7 @@ export default defineConfigWithVueTs(
       'playwright-report/**',
       'test-results/**',
       'tests/mocks/public/**',
+      '.smoke-runs/**',
     ],
   },
   js.configs.recommended,

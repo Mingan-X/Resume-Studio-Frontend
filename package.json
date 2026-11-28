@@ -26,7 +26,8 @@
     "test:smoke:analyses": "pnpm run api:generate && node scripts/runAnalysisSmoke.mjs",
     "test:smoke:auth": "pnpm run api:generate && node scripts/runAuthSmoke.mjs",
     "build:analyze": "pnpm run build && node scripts/analyzeBuild.mjs",
-    "test:deployment": "node scripts/runDeploymentChecks.mjs"
+    "test:deployment": "node scripts/runDeploymentChecks.mjs",
+    "test:rollback": "node scripts/rollbackDrill.mjs"
   },
   "dependencies": {
     "@tanstack/vue-query": "5.108.4",

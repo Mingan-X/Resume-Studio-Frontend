@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.2-T6 部署覆盖配置与本地回滚（feature/f3.2-quality）
+
+- 提供与后端release Compose叠加的frontend覆盖，只替换既有proxy模板/安全头/路由挂载，envsubst限定PUBLIC_HOST；不改后端文件。正式发布/不可变dist目录/旧assets保留/回滚步骤写deployment，要求受信TLS及核验digest。
+- Compose合并config --quiet通过（合成占位仅语法，不pull/build/up）。完整TLS模板最初80端口绑定被Windows拒绝，改成本轮loopback18080/18443后nginx -t通过；没有占用生产端口或改防火墙。真实nginx8090用两份生产产物A→B→A回滚演练通过，原dist不变、本轮进程已退出。
+- Lint首次扫描本轮回滚复制的minified dist得到大量产物错误，将.smoke-runs与dist一样明确排除后零警告通过，源码规则不变。目标服务器TLS/HSTS/镜像核验、Compose启动及目标回滚演练按既定F3.2-T6延后；本机演练不替代目标验收。
+
 ## 2026-11-28 F3.2-T5 nginx安全响应头与CSP实测（feature/f3.2-quality）
 
 - 从nginx.org官方HTTPS下载Windows稳定1.30.8，zip SHA256 ccd0c03ff665d4534e6595e455624ededc9eeb11a81a6a128920fcc928be1151；仅本机8088/8089与本次API进程。生产dist与真实nginx配置语法/响应头/缓存/SPA/真实后端未知API404验证通过，页面业务数据用合成路由夹具。

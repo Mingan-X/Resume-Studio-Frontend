@@ -1,0 +1,22 @@
+# 与后端infra/release/compose.yaml合并，仅覆盖现有proxy的前端配置挂载。
+name: resume-studio
+services:
+  proxy:
+    environment:
+      NGINX_ENVSUBST_FILTER: '^PUBLIC_HOST$'
+    volumes:
+      - type: bind
+        source: ${FRONTEND_CONFIG_DIR:?Set the absolute frontend deploy directory}/default.conf.template
+        target: /etc/nginx/templates/default.conf.template
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: ${FRONTEND_CONFIG_DIR}/security-headers.conf
+        target: /etc/nginx/resume/security-headers.conf
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: ${FRONTEND_CONFIG_DIR}/locations.conf
+        target: /etc/nginx/resume/locations.conf
+        read_only: true
+        bind: { create_host_path: false }
