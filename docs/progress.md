@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.2-T8 远端CI确认（feature/f3.2-quality，待验收）
+
+- 分支提交f6360121bcccb04a199a4e5a9c3ca4acec4d7df9已推送，[GitHub Actions 46099032445](https://github.com/Mingan-X/Resume-Studio-Frontend/actions/runs/46099032445)实际success：冻结安装、typecheck、Lint、单元/组件/契约、build、首屏预算、生产产物审计、Chromium与完整E2E全部通过。
+- 本记录仅追加远端证据，源码/测试/构建配置未变；随后按no-ff合并develop并推送，统一验收边界保持上文记录。main和后端文件不操作。
+
 ## 2026-11-28 F3.2-T8 最终文档与交接（feature/f3.2-quality，待验收）
 
 - F1.1–F3.2全部可执行任务完成并分任务记录，F3.2标待验收；README、架构、测试、部署、quality-review明确当前能力、契约缺口、人工/真实模型/目标环境边界。后端最终仍b2104ea且工作区干净，前端main仍0e81261，未操作main/master。
