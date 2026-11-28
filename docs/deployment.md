@@ -4,6 +4,8 @@
 
 ## 1. 环境
 
+F3.1会话联调已在本机独立HTTPS测试入口验证。生产需真实受信TLS、同源反向代理及后端AUTH_ENABLED/AUTH_ORIGIN精确匹配；不能把auth-real的自签证书接受选项用于发布。前端构建不包含账号、CSRF或TLS文件。
+
 - Node.js 24.22.3、pnpm 12.x，与后端一致；`.node-version` 与 `package.json` 的 `engines` 在F1.1写入。
 - `.npmrc` 与后端相同：`engine-strict=true`、`strict-peer-dependencies=true`、`save-exact=true`、`registry=https://registry.npmjs.org/`。
 - 安装一律使用 `pnpm install --frozen-lockfile`。
