@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.2-T7 生产错误监控决定与产物核对（feature/f3.2-quality）
+
+- FD2保持首版无生产错误监控，开发仅kind/requestId；产物审计脚本与CI检查无公开sourcemap、测试凭证、MSW worker或已知第三方上报端点。部署文档明确边界，不把静态审计称安全认证。
+- 核对发现Vue Query保留mutation变量，登录完成/失败后finally擦除临时password引用，避免失败缓存长期保留口令。Cookie仍不读取，CSRF仅内存。
+- typecheck、Lint、116项测试、build、audit:production通过。生产网络/CSP实测见T5，后续最终回归再运行登录/页面流程；无新增监控依赖或第三方通信。
+
 ## 2026-11-28 F3.2-T6 部署覆盖配置与本地回滚（feature/f3.2-quality）
 
 - 提供与后端release Compose叠加的frontend覆盖，只替换既有proxy模板/安全头/路由挂载，envsubst限定PUBLIC_HOST；不改后端文件。正式发布/不可变dist目录/旧assets保留/回滚步骤写deployment，要求受信TLS及核验digest。

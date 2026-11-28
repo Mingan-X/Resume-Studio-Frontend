@@ -48,16 +48,21 @@ export function useLoginMutation() {
   return useMutation({
     retry: false,
     mutationFn: async (body: LoginData['body']) => {
-      await client.invalidateQueries({ queryKey: sessionKey, exact: true });
-      await loadSession(client, store);
-      const response = await apiRequest('/auth/login', zLoginResponse, {
-        method: 'POST',
-        body: zLoginBody.parse(body),
-        headers: csrfHeaders('POST'),
-        retries: 0,
-      });
-      setCsrf(response.csrfToken);
-      return { user: response.user, expiresAt: response.expiresAt };
+      try {
+        await client.invalidateQueries({ queryKey: sessionKey, exact: true });
+        await loadSession(client, store);
+        const response = await apiRequest('/auth/login', zLoginResponse, {
+          method: 'POST',
+          body: zLoginBody.parse(body),
+          headers: csrfHeaders('POST'),
+          retries: 0,
+        });
+        setCsrf(response.csrfToken);
+        return { user: response.user, expiresAt: response.expiresAt };
+      } finally {
+        // Vue Query保留mutation variables供重试；认证不重试，完成后擦除临时口令引用。
+        body.password = '';
+      }
     },
     onSuccess: async (session) => {
       await client.cancelQueries();
