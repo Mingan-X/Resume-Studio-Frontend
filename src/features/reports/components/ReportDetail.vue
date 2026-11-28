@@ -5,6 +5,7 @@ import { useReport } from '../api/useReport';
 import EligibilityGroups from './EligibilityGroups.vue';
 import ReportProfile from './ReportProfile.vue';
 import ReportRecommendations from './ReportRecommendations.vue';
+import ReportRecompute from './ReportRecompute.vue';
 import ReportSummary from './ReportSummary.vue';
 import StructuredResume from './StructuredResume.vue';
 const props = defineProps<{ reportId: string }>();
@@ -17,7 +18,9 @@ const query = useReport(() => props.reportId);
         :content="query.data.value.content"
       /><ReportProfile :content="query.data.value.content" /><ReportRecommendations
         :content="query.data.value.content"
-      /><EligibilityGroups :content="query.data.value.content" /></div
+      /><EligibilityGroups :content="query.data.value.content" /><ReportRecompute
+        :report="query.data.value"
+      /></div
   ></RequestState>
 </template>
 <style scoped>
