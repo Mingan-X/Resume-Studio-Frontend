@@ -8,6 +8,13 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.1-T5 真实HTTPS会话联调（feature/f3.1-auth）
+
+- 真实HTTPS两项通过：匿名访问→登录→原页面、浏览器缺CSRF写请求403、正确CSRF创建岗位、退出与重新受保护访问；同一浏览器真实Secure Cookie下XHR上传PDF成功。无手工Cookie注入。临时自签TLS仅auth-real测试上下文接受，不修改系统信任或生产配置；关闭trace避免账号/会话进入网络归档，账号/输入均合成。
+- 精确记录本轮Set-Cookie令牌hash仅用于测试清理，前端应用不读取Cookie；账号/业务数据/会话及临时TLS文件清理通过。前端存储检查仅允许Vue Router内置vue-router:scroll界面位置键，无业务内容/凭证。最终typecheck、Lint、115项测试、build、24项E2E通过。
+- 失败：首次夹具启动未取得ready（原输出保留，根因未确认），同目录有界诊断启动/cleaned成功；三次缺CSRF断言得到401，最终证据确认URL正则误匹配login的redirect参数、请求早于登录完成，改精确完整URL及标题后403通过，前述Cookie上下文猜测撤回。存储初查误要求sessionStorage绝对空，核对Vue Router官方实现后只排除滚动位置键。
+- 遗留：启动诊断目录.smoke-runs/auth-Wzin4r的manifest为cleaned、业务数据已清理；删除其临时证书目录被自动审批以blocked by policy拒绝，未绕过，忽略目录保留待手工清理。其他成功运行目录均正常清理。目标服务器TLS/真实模型未验证。
+
 ## 2026-11-28 F3.1-T4 写请求CSRF（feature/f3.1-auth）
 
 - fetch与XHR非GET/HEAD统一附内存X-CSRF-Token；GET不附头，缺值不伪造，后端403原样处理。Origin由浏览器发送，不手写或读取Cookie。登录成功轮换后使用新CSRF，退出后清除。

@@ -14,11 +14,27 @@ export default defineConfig({
   projects: [
     { name: 'ui', testIgnore: '**/*.smoke.spec.ts', use: { ...devices['Desktop Chrome'] } },
     { name: 'real', testMatch: '**/*.smoke.spec.ts', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'auth-real',
+      testMatch: '**/auth.smoke.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://localhost:4443',
+        ignoreHTTPSErrors: true,
+        trace: 'off',
+      },
+    },
   ],
   webServer: {
     command: 'pnpm run dev --mode e2e --port 4173 --strictPort',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
-    env: { VITE_ENABLE_MOCKS: process.argv.includes('--project=real') ? 'false' : 'true' },
+    env: {
+      VITE_ENABLE_MOCKS: process.argv.some(
+        (arg) => arg === '--project=real' || arg === '--project=auth-real',
+      )
+        ? 'false'
+        : 'true',
+    },
   },
 });
