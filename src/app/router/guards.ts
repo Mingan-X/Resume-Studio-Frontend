@@ -1,9 +1,12 @@
+import type { QueryClient } from '@tanstack/vue-query';
+import type { Pinia } from 'pinia';
 import type { Router } from 'vue-router';
 
+import { loadSession, useSessionStore } from '@/features/auth';
 import { routeIdSchema, safeRedirect } from '@/shared/lib/routeInput';
 
-export function installGuards(router: Router) {
-  router.beforeEach((to) => {
+export function installGuards(router: Router, client: QueryClient, pinia: Pinia) {
+  router.beforeEach(async (to) => {
     if (to.name === 'not-found') return true;
     for (const key of ['resumeId', 'jobId', 'taskId', 'reportId']) {
       if (key in to.params && !routeIdSchema.safeParse(to.params[key]).success) {
@@ -22,7 +25,15 @@ export function installGuards(router: Router) {
         replace: true,
       };
     }
-    // F3.1接入会话前只校验输入，开发期身份守卫放行。
+    if (to.path === '/login') return true;
+    const session = useSessionStore(pinia);
+    try {
+      await loadSession(client, session);
+      if (!session.user && !session.development)
+        return { path: '/login', query: { redirect: to.fullPath } };
+    } catch {
+      return { path: '/login', query: { redirect: to.fullPath } };
+    }
     return true;
   });
 }

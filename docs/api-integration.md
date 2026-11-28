@@ -4,6 +4,8 @@
 
 ## 1. 当前可对接的接口
 
+F3.1已接入auth/session/login/logout、守卫与CSRF。先GET匿名session，登录POST附CSRF并接受轮换Cookie/CSRF；仅同源HTTPS能验证真实Secure Cookie。前端不传owner/不读取Cookie，CSRF仅内存，非GET/HEAD统一附头。生产必须后端AUTH_ENABLED；开发404兼容仅用于本机旧模式，不作为生产认证降级。
+
 F2.5已接入POST reports/:id/recompute、GET reports及revisions和任务SSE。重算从results.weightsSnapshot复制表单，输入变化换键、同输入重试复用键，后端返回新ID才跳转；原缓存不覆盖。历史按后端游标排序，sourceReportId明确链接。SSE事件名task，Last-Event-ID由同一原生连接恢复携带；前端去重不补序号、不把事件计数算成百分比。
 
 F2.4消费GET reports/:reportId不可变快照，按top10/pending/ineligible返回顺序显示，不用召回rank生成最终名次；number分数原样呈现，不取整补零。结构化简历/画像/逐项执行与证据来自content。用户请求原简历详情时，通过analyses/options分页查询实际版本映射再跳双ID详情；找不到保留报告内文本核对。预算/失败/未执行不转成unknown。真实模型报告内容仍延后。

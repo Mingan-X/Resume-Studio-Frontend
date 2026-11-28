@@ -3,9 +3,11 @@ import { ElButton } from 'element-plus';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 
+import { useSessionStore } from '@/features/auth';
 import { environmentSchema } from '@/shared/config/environment';
 
 import App from './App.vue';
+import { installAuthFailureHandling } from './auth';
 import { installErrorHandlers } from './errors';
 import { createApplicationRouter } from './router';
 
@@ -14,11 +16,16 @@ import 'element-plus/es/components/button/style/css';
 import './styles/tokens.css';
 
 export function createApplication() {
+  const pinia = createPinia(),
+    client = new QueryClient(),
+    router = createApplicationRouter(client, pinia);
   const app = createApp(App)
-    .use(createPinia())
+    .use(pinia)
     .use(ElButton)
-    .use(VueQueryPlugin, { queryClient: new QueryClient() })
-    .use(createApplicationRouter());
+    .use(VueQueryPlugin, { queryClient: client })
+    .use(router);
+  const cleanup = installAuthFailureHandling(router, client, useSessionStore(pinia));
+  app.onUnmount(cleanup);
   installErrorHandlers(app);
   return app;
 }

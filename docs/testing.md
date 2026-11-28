@@ -17,12 +17,15 @@ pnpm run test:smoke:tasks # 隔离合成任务真实HTTP与数据库
 pnpm run test:smoke:resumes # PDF/DOCX与扫描/加密拒绝边界，串行4场景
 pnpm run test:smoke:jobs # 真实JD/要求/发布/任务查询；单worker
 pnpm run test:smoke:analyses # 合成授权输入，真实创建至QUEUED，不运行模型
+pnpm run test:smoke:auth # HTTPS localhost:4443，真实会话/CSRF/上传
 pnpm run build       # 生产构建
 ```
 
 `pnpm test` 不依赖后端或网络。`test:e2e` 分两组：使用MSW的界面流程测试，以及连接本地真实后端的冒烟测试；后端未启动时冒烟测试失败，不自动跳过。
 
 ## 2. 测试分层
+
+认证真实冒烟需3000/4173/4443空闲、后端编译产物/迁移/项目数据库可用。本机OpenSSL来自Git安装（脚本明确路径），临时证书只在.smoke-runs创建，auth-real独立浏览器接受该自签证书且trace关闭；不安装系统信任，不影响生产。真实账号由后端服务以合成用户名/口令创建，浏览器自行接受HttpOnly/Secure/SameSite Cookie，应用不手工注入或读取令牌。结束先关闭代理/API、核验无活动操作后精确清理；诊断失败目录状态与审批拒绝见progress。
 
 岗位真实冒烟使用已编译后端的测试装配、真实服务/数据库和随机owner；只注入明确frontend-smoke-only的索引目标标识以创建PENDING任务，不连接模型/向量/消费者。清理前核验无执行attempt和未停止操作，不把任务创建描述为召回可用。缺模型为真实MODEL_UNAVAILABLE，手工要求来自实际JD。需3000端口空闲；结束精确清理本轮owner关联数据。
 

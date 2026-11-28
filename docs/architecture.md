@@ -120,7 +120,7 @@ features/<领域>/
 - 页面组件用路由级懒加载（`() => import(...)`）。
 - 简历详情保持`/resumes/:resumeId`，必须带`?versionId=<UUID>`，原文锚点`#block-<UUID>`；双ID和锚点经Zod校验，未提供合法版本不请求接口。列表及上传成功入口都带版本，刷新不隐式换latest。
 - 路由参数在页面入口用Zod校验，非法参数显示404，不发请求。
-- 登录在S3.2之前不存在；路由守卫预留统一入口 `app/router/guards.ts`，开发期始终放行。S3.2后收到401时跳转 `/login?redirect=<原路径>`，`redirect` 只接受站内相对路径。
+- F3.1路由守卫先校验参数，再查询auth/session；匿名跳转登录。401清空资源缓存/用户/CSRF并跳登录，403显示无权限和requestId，redirect仅站内。只有DEV且认证路由404时保留本地开发模式；生产不放行。
 
 ## 7. 错误处理
 
@@ -146,6 +146,7 @@ F2.5任务页首读快照后订阅原生EventSource的task事件，按taskId/seq
 - 只有 `VITE_` 前缀的环境变量会进入构建产物，其中不得包含任何秘密。
 - 生产构建不公开发布sourcemap。
 - 认证采用后端会话Cookie（决策D9），前端不读取或保存令牌。
+- 匿名session获得CSRF，登录轮换后更新内存CSRF；fetch/XHR非GET/HEAD附X-CSRF-Token，Origin由浏览器发送。Query缓存只存user/expiresAt，Pinia存当前用户客户端状态，Cookie由浏览器处理；登录/登出/401清空旧资源缓存。应用不写浏览器存储，Vue Router自身仅保存滚动位置。
 - 安全响应头与CSP由反向代理设置，见[部署](deployment.md#3-安全响应头)。
 
 ## 10. 性能与可访问性

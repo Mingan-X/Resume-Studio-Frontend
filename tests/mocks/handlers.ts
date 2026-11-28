@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 import { analysisHandlers } from './analysisHandlers';
+import { authHandlers } from './authHandlers';
 import { queuedTask } from './fixtures/tasks';
 import { jobHandlers } from './jobHandlers';
 import { reportHandlers } from './reportHandlers';
@@ -13,6 +14,7 @@ export const handlers = [
   ...jobHandlers,
   ...analysisHandlers,
   ...reportHandlers,
+  ...authHandlers,
   http.get('*/health', () => HttpResponse.json(healthyResponse)),
   http.get('*/api/v1/tasks/:taskId', ({ params }) =>
     HttpResponse.json(

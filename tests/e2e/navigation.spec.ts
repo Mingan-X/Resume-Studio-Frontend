@@ -32,5 +32,5 @@ test('未知路径及非法ID显示404且不请求接口', async ({ page }) => {
 test('登录返回地址只接受站内路径', async ({ page }) => {
   await page.goto('/login?redirect=https://external.test');
   await expect(page).toHaveURL(/redirect=\/resumes$/);
-  await expect(page.getByText('功能开发中')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '登录 Resume Studio' })).toBeVisible();
 });

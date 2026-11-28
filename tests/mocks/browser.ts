@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { z } from 'zod';
 
+import { authFlowHandlers } from './authFlow';
 import { resumeFixture } from './fixtures/resumes';
 import { queuedTask, retryTask } from './fixtures/tasks';
 import { handlers } from './handlers';
@@ -18,10 +19,12 @@ export async function startMocks() {
       'task-cancel-race',
       'resume-flow',
       'job-flow',
+      'auth-flow',
     ])
     .catch('healthy')
     .parse(new URLSearchParams(window.location.search).get('scenario'));
   const worker = setupWorker(...handlers);
+  if (scenario === 'auth-flow') worker.use(...authFlowHandlers());
   if (scenario === 'job-flow') worker.use(...jobFlowHandlers());
   if (scenario === 'resume-flow') {
     let uploaded = false;

@@ -8,6 +8,39 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.1-T6 文档与交付（feature/f3.1-auth，待验收）
+
+- README、架构、API、测试和部署说明同步会话引导、CSRF内存、DEV边界及HTTPS前置，阶段待验收。最终115项测试、build、24项E2E与2项真实HTTPS通过；纯文档检查本地链接及diff，不重复数据库操作。T1–T6分别提交，no-ff集成推送。
+- 未使用goal/子代理，检查串行；未改后端文件或main。目标环境、真实模型延后；已确认cleaned但被审批拒绝删除的诊断TLS目录保留，见T5。
+
+## 2026-11-28 F3.1-T5 真实HTTPS会话联调（feature/f3.1-auth）
+
+- 真实HTTPS两项通过：匿名访问→登录→原页面、浏览器缺CSRF写请求403、正确CSRF创建岗位、退出与重新受保护访问；同一浏览器真实Secure Cookie下XHR上传PDF成功。无手工Cookie注入。临时自签TLS仅auth-real测试上下文接受，不修改系统信任或生产配置；关闭trace避免账号/会话进入网络归档，账号/输入均合成。
+- 精确记录本轮Set-Cookie令牌hash仅用于测试清理，前端应用不读取Cookie；账号/业务数据/会话及临时TLS文件清理通过。前端存储检查仅允许Vue Router内置vue-router:scroll界面位置键，无业务内容/凭证。最终typecheck、Lint、115项测试、build、24项E2E通过。
+- 失败：首次夹具启动未取得ready（原输出保留，根因未确认），同目录有界诊断启动/cleaned成功；三次缺CSRF断言得到401，最终证据确认URL正则误匹配login的redirect参数、请求早于登录完成，改精确完整URL及标题后403通过，前述Cookie上下文猜测撤回。存储初查误要求sessionStorage绝对空，核对Vue Router官方实现后只排除滚动位置键。
+- 遗留：启动诊断目录.smoke-runs/auth-Wzin4r的manifest为cleaned、业务数据已清理；删除其临时证书目录被自动审批以blocked by policy拒绝，未绕过，忽略目录保留待手工清理。其他成功运行目录均正常清理。目标服务器TLS/真实模型未验证。
+
+## 2026-11-28 F3.1-T4 写请求CSRF（feature/f3.1-auth）
+
+- fetch与XHR非GET/HEAD统一附内存X-CSRF-Token；GET不附头，缺值不伪造，后端403原样处理。Origin由浏览器发送，不手写或读取Cookie。登录成功轮换后使用新CSRF，退出后清除。
+- typecheck、Lint、115项测试、build、24项E2E通过；MSW登录/登出校验新旧CSRF，单元覆盖fetch/XHR与缺值403。首次新增测试复用已消费Response导致contract错误，模拟改为每请求新Response后通过，业务实现未放宽。
+
+## 2026-11-28 F3.1-T3 守卫与失效处理（feature/f3.1-auth）
+
+- 路由先校验输入，再fetch会话；匿名转/login?redirect，登录返回站内原地址。401取消/清空资源缓存和CSRF/用户状态后跳登录；403显示安全无权限信息并保留requestId，404保持“不存在或无权访问”。顶部当前账号和退出已接线。
+- typecheck、Lint、112项原测试、build、24项E2E通过；新增401/403专项1项及类型检查通过（累计113项），明确断言缓存移除、redirect和requestId。真实HTTPS/Secure Cookie在T5；未读取浏览器Cookie或保存凭证。
+
+## 2026-11-28 F3.1-T2 登录表单（feature/f3.1-auth）
+
+- /login表单使用管理员账号，无注册入口；提交中禁用，失败保留用户名并清除口令，安全错误/requestId可见；成功按safeRedirect返回站内路径。口令只在表单临时内存，卸载清除。
+- typecheck、Lint、112项测试、build、23项E2E通过；组件验证失败后的用户名/口令状态。全局认证守卫在T3接线，真实HTTPS/Secure Cookie在T5验证。
+
+## 2026-11-28 F3.1-T1 会话接口与当前用户（feature/f3.1-auth，进行中）
+
+- F2.5合并推送develop5246b9c；F3.1前fetch后端b2104ea并核验S3.2合并9ca226f。快照仍相同。读取auth契约/控制器/Guard，按匿名session引导→login轮换→logout实现。
+- API请求在feature，Pinia仅存当前用户/就绪/开发模式客户端状态，Query缓存保留用户和过期时间；CSRF只存内存，不进入浏览器存储或URL。浏览器Cookie不读取；登录/登出清理旧查询缓存。仅DEV遇认证路由404时保留后端既定本地模式，生产不放行。
+- typecheck、Lint、111项测试、build、契约9项通过；当前尚未启用路由鉴权/登录页面（T2/T3）。新增CSRF内存工具验证非法值与GET不附头，业务写请求接线在T4。
+
 ## 2026-11-28 F2.5-T5 文档与交付（feature/f2.5-revisions，待验收）
 
 - 架构§8、API、测试与README同步实际SSE/重算/历史；阶段待验收。最新完整回归108项测试、build、23项E2E和真实非模型3项/任务SSE4项均通过，纯文档不重复测试。链接/diff检查执行；T1–T5独立提交并no-ff集成推送。
