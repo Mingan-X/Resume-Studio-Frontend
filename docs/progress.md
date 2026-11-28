@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.1-T2 登录表单（feature/f3.1-auth）
+
+- /login表单使用管理员账号，无注册入口；提交中禁用，失败保留用户名并清除口令，安全错误/requestId可见；成功按safeRedirect返回站内路径。口令只在表单临时内存，卸载清除。
+- typecheck、Lint、112项测试、build、23项E2E通过；组件验证失败后的用户名/口令状态。全局认证守卫在T3接线，真实HTTPS/Secure Cookie在T5验证。
+
 ## 2026-11-28 F3.1-T1 会话接口与当前用户（feature/f3.1-auth，进行中）
 
 - F2.5合并推送develop5246b9c；F3.1前fetch后端b2104ea并核验S3.2合并9ca226f。快照仍相同。读取auth契约/控制器/Guard，按匿名session引导→login轮换→logout实现。

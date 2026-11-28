@@ -3,11 +3,12 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { installGuards } from './guards';
 
 export function createApplicationRouter() {
-  const pages = [{ path: '/login', title: '登录' }];
+  const pages: { path: string; title: string }[] = [];
   const router = createRouter({
     history: createWebHistory(),
     routes: [
       { path: '/', redirect: '/resumes' },
+      { path: '/login', component: () => import('@/pages/LoginPage.vue'), meta: { title: '登录' } },
       {
         path: '/reports',
         component: () => import('@/pages/ReportsPage.vue'),
