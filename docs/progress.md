@@ -8,6 +8,12 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F2.5-T3 SSE任务进度（feature/f2.5-revisions）
+
+- 接入后端event:task及生成TaskEvent校验，按taskId/seq/id过滤错任务、重复/旧事件，再查询后端快照；终态/隐藏/卸载关闭连接，原生EventSource断线保留Last-Event-ID补读，失败上限后恢复2秒轮询。
+- 最终typecheck、Lint、107项测试、build、23项E2E通过；原生本地传输测试实际看到Last-Event-ID=1后事件2，断线失败回退。真实任务组4项通过，含持久SSE最终seq补读204，查询/取消及隔离清理保持通过。
+- 首次E2E发现fallback状态在refetchInterval回调内未被Vue Query响应追踪，改computed间隔配置后通过；类型检查曾拒绝泛型Query键不一致，改为所需state结构类型，无断言。去重测试首次误匹配“已完成”计数标题，改精确状态标签后107项通过。保留全部失败，不放宽超时或断言。
+
 ## 2026-11-28 F2.5-T2 报告历史（feature/f2.5-revisions）
 
 - /reports列表与报告内同分析revisions列表均按游标分页，显示时间/状态/revision/来源链接；不覆盖原报告或重排后端结果。

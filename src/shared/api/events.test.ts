@@ -38,6 +38,21 @@ function setup() {
   return { source, stop, onData, onFallback, onError };
 }
 describe('SSE重连与回退', () => {
+  it('处理命名task事件', () => {
+    vi.stubGlobal('EventSource', TestSource);
+    const onData = vi.fn();
+    const stop = subscribeEvents('/events-probe', {
+      schema: z.object({ count: z.number() }),
+      eventName: 'task',
+      onData,
+      onFallback: vi.fn(),
+    });
+    TestSource.instances[0]?.dispatchEvent(
+      new MessageEvent('task', { data: '{"count":2}', lastEventId: '3' }),
+    );
+    expect(onData).toHaveBeenCalledWith({ count: 2 }, '3');
+    stop();
+  });
   it('交付已校验事件与id，重连保留同一原生连接', () => {
     const { source, onData, onFallback, stop } = setup();
     source.onmessage?.(new MessageEvent('message', { data: '{"count":2}', lastEventId: '7' }));

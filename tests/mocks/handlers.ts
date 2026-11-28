@@ -8,6 +8,7 @@ import { resumeHandlers } from './resumeHandlers';
 
 export const healthyResponse = { status: 'ok', service: 'api', environment: 'test' } as const;
 export const handlers = [
+  http.get('*/api/v1/tasks/:taskId/events', () => new HttpResponse(null, { status: 503 })),
   ...resumeHandlers,
   ...jobHandlers,
   ...analysisHandlers,

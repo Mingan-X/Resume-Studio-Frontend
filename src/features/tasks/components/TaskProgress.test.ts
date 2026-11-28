@@ -34,6 +34,49 @@ function render() {
   };
 }
 describe('任务进度页', () => {
+  it('SSE相同seq不重复刷新，收到终态后关闭连接', async () => {
+    class Source extends EventTarget {
+      static CLOSED = 2;
+      static current: Source;
+      readyState = 1;
+      onopen = null;
+      onerror = null;
+      onmessage = null;
+      close = vi.fn();
+      constructor() {
+        super();
+        Source.current = this;
+      }
+    }
+    vi.stubGlobal('EventSource', Source);
+    let calls = 0;
+    server.use(
+      http.get('*/api/v1/tasks/:taskId', () => {
+        calls++;
+        return HttpResponse.json({ ...queuedTask, status: calls > 1 ? 'SUCCEEDED' : 'RUNNING' });
+      }),
+    );
+    const { wrapper, cleanup } = render();
+    await expect.poll(() => wrapper.find('section').exists()).toBe(true);
+    const event = {
+      taskId,
+      seq: 1,
+      stage: 'SAVE',
+      counts: { schemaVersion: 1, planned: 1, completed: 1, failed: 0 },
+      message: '已保存',
+      createdAt: '2026-11-28T00:00:00.000Z',
+    };
+    Source.current.dispatchEvent(
+      new MessageEvent('task', { data: JSON.stringify(event), lastEventId: '1' }),
+    );
+    Source.current.dispatchEvent(
+      new MessageEvent('task', { data: JSON.stringify(event), lastEventId: '1' }),
+    );
+    await expect.poll(() => wrapper.get('.status').text()).toBe('已完成');
+    expect(calls).toBe(2);
+    expect(Source.current.close).toHaveBeenCalled();
+    cleanup();
+  });
   it('真实分析阶段计数原样显示，有reportId才提供入口', async () => {
     server.use(
       http.get('*/api/v1/tasks/:taskId', () =>
