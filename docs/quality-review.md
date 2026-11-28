@@ -8,13 +8,25 @@
 
 尚未运行NVDA/JAWS等真实读屏软件的听读验收，列为人工验收缺口；自动AX语义、键盘与对比度检查不替代读屏全流程。不宣称已获WCAG 2.2 AA认证。目标服务器浏览器/TLS和真实模型报告质量仍待统一验收。
 
-## 证据入口
-
 ## 构建预算
 
-生产manifest递归核对index.html及/resumes路由的静态依赖，去重后首屏JS gzip为103501字节（约101.08KiB），门槛307200字节（300KiB）；保留起点预算并纳入CI。报告图表在独立动态块，不计初始简历页下载。测量脚本使用Node gzip默认设置，构建工具报告的压缩等级可能略有差异。此为资源体积，不是实际用户网络时延或生产性能保证。
+生产manifest递归核对index.html、动态启动createApplication及/resumes路由静态依赖，去重后门槛307200字节（300KiB）；已纳入CI。初测103501字节，严格CSP启动拆分后104800字节，最终以build-analysis.json与progress记录为准。报告图表独立动态加载。Node gzip默认设置与构建工具压缩等级可能略有差异；体积不代表实际网络时延或生产性能保证。
 
 `pnpm run build:analyze`输出dist/build-analysis.json，列出每个计入块；预算超限非零退出。首次使用src/main.ts查manifest失败，按实际Vite入口index.html修正后通过。
+
+## 安全与部署本地证据
+
+nginx官方Windows稳定1.30.8实际提供生产dist；安全头、所有已实现页面和表单的严格CSP（无unsafe-inline/eval）、缓存、深链与真实API404通过。Zod使用jitless且动态应用装配保证先配置。Compose叠加仅config --quiet语法核对，未拉镜像或启动容器。独立8090发布A→B→A成功，原dist不变。目标Linux、镜像digest、受信TLS/HSTS和服务器回滚仍待验收。
+
+## 已知契约与验收缺口
+
+- 简历列表无文件显示名/解析状态字段，当前展示编号/时间/版本并说明缺口。
+- 最终报告无rank数字，仅有top10有序ID；保留顺序，不以召回rank冒充最终名次。number分数保留原值，不前端toFixed补尾零。
+- 原简历映射通过analyses/options查询后跳双ID版本详情，找不到则保留报告内原文，未伪造resumeId。
+- 真实模型分析终态、报告/重算与目标部署按既定延后；真实读屏听读列人工缺口。
+- `.smoke-runs/auth-Wzin4r`诊断manifest已cleaned，业务数据清理完成；临时TLS目录删除被自动审批拒绝，未绕过，需维护者手工清理。`auth-2XtTJf`、`auth-II7RTp`两轮曾因夹具提前退出遗漏清理，最终已按精确manifest清理账号/owner及业务记录，目录保留；这两轮匿名会话hash未持久记录，不能确认其即时物理清理，按后端匿名过期策略处理。此限制不冒充清理全通过，详见progress更正。
+
+## 证据入口
 
 - 自动化与键盘：[accessibility.spec.ts](../tests/e2e/accessibility.spec.ts)
 - 字段错误关联：[FieldError.test.ts](../src/shared/ui/FieldError.test.ts)

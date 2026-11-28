@@ -12,9 +12,9 @@ Resume-Studio/
 
 ## 当前状态
 
-**F1.1–F3.1已实现，阶段待验收；提前CI已通过远端验证。** 简历、岗位、分析创建、任务SSE和HTTPS会话/CSRF已完成本地非模型真实联调；报告展示/重算/历史通过MSW工程验证，真实模型报告链路及目标部署待统一验收。已知缺口见[进度](docs/progress.md)及[开发计划](docs/development-roadmap.md)。
+**F1.1–F3.2可执行开发已实现，等待统一验收。** 简历、岗位、分析创建、任务SSE和HTTPS会话/CSRF已完成本地非模型真实联调；报告展示/重算/历史通过MSW工程验证。真实模型报告、目标服务器部署及读屏人工核查仍未完成，已知契约缺字段见[进度](docs/progress.md)、[质量核对](docs/quality-review.md)与[路线图](docs/development-roadmap.md)。
 
-前端消费health及任务查询/取消；契约来源见[快照记录](contracts/SOURCE.md)。其他接口在对应后端阶段合并后接入。
+前端消费健康、会话、简历、岗位、分析、报告及SSE契约；来源见[快照记录](contracts/SOURCE.md)。不包含后端数据生命周期删除UI（不在本轮前端路线图范围）。
 
 ## 技术栈
 
@@ -45,6 +45,10 @@ pnpm run test:smoke:resumes # 真实合成PDF/DOCX上传；需空闲3000端口
 pnpm run test:smoke:jobs # 真实岗位手工确认和发布；不消费索引任务
 pnpm run test:smoke:analyses # 真实选项与创建，仅验证QUEUED，不执行模型
 pnpm run test:smoke:auth # 本地HTTPS真实会话/CSRF/上传，见测试前置
+pnpm run build:analyze # 首屏JS gzip300KiB预算
+pnpm run audit:production # 产物测试数据/凭证/监控边界核对
+pnpm run test:deployment # 已构建dist与本机官方nginx检查
+pnpm run test:rollback # 本机独立nginx A→B→A演练
 ```
 
 `pnpm run preview`预览dist，不提供后端代理；真实联调用dev。E2E启动独立Vite实例，运行前关闭本项目手动启动的dev，避免Vite项目锁冲突。开发时可设置`VITE_ENABLE_MOCKS=true`启用MSW，生产构建禁止该值；mock不代表真实后端可用。

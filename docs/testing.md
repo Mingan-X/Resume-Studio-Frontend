@@ -1,6 +1,6 @@
 # 测试与验证
 
-状态：F1.1–F1.3已覆盖工程/共享层、生成契约、任务轮询/取消与真实合成任务；CI已实测通过。实际结果见[进度](progress.md)。简历、岗位、分析、报告和认证覆盖随后续阶段增加。
+状态：F1.1–F3.2已有单元/组件/契约、MSW流程、非模型真实HTTP/HTTPS、SSE、可访问性和本机nginx验证；实际逐轮结果及失败见[进度](progress.md)。真实模型完整链路/目标环境/真实读屏听读仍需统一验收。
 
 首次在本机执行 `pnpm exec playwright install chromium` 下载浏览器；Linux CI使用 `pnpm exec playwright install --with-deps chromium`。浏览器保存在用户缓存中，不提交到仓库。`test:e2e`运行离线界面组，`test:smoke`运行真实后端组（后端不运行时失败）；两组均使用独立Vite端口4173，不复用不明来源服务器。失败保留trace与HTML报告，使用合成数据。
 
@@ -19,6 +19,10 @@ pnpm run test:smoke:jobs # 真实JD/要求/发布/任务查询；单worker
 pnpm run test:smoke:analyses # 合成授权输入，真实创建至QUEUED，不运行模型
 pnpm run test:smoke:auth # HTTPS localhost:4443，真实会话/CSRF/上传
 pnpm run build       # 生产构建
+pnpm run build:analyze # 生产构建及首屏gzip预算
+pnpm run audit:production
+pnpm run test:deployment # dist已构建，NGINX_EXE指向官方nginx
+pnpm run test:rollback
 ```
 
 `pnpm test` 不依赖后端或网络。`test:e2e` 分两组：使用MSW的界面流程测试，以及连接本地真实后端的冒烟测试；后端未启动时冒烟测试失败，不自动跳过。
