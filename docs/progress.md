@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.2-T3 可访问性核对（feature/f3.2-quality）
+
+- 加入axe4.14.1开发依赖，registry engines/peers与官方README核对、冻结安装通过。10页面自动WCAG规则0违规；768px键盘跳内容/焦点/无横向溢出验证通过，专项11项。
+- 人工核对补字段错误aria-invalid/aria-describedby关联与清理；typecheck、Lint、116项测试、build和a11y11项全部通过。核对记录见quality-review；真实读屏听读未执行，记录为人工验收缺口，未声称自动扫描等于AA认证。
+
 ## 2026-11-28 F3.2-T2 可执行关键真实流程（feature/f3.2-quality，进行中）
 
 - F3.1已合并推送develop6595fc2；F3.2前fetch后端b2104ea，S3.3合并已核验。T1 CI已提前交付，不重复实施。
