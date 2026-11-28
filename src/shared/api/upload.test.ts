@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
+import { setCsrf } from './sessionContext';
 import { uploadRequest } from './upload';
 
 class TestXHR {
@@ -36,6 +37,28 @@ function start(signal?: AbortSignal) {
   return { pending, xhr: TestXHR.current, onProgress, body };
 }
 describe('上传传输边界', () => {
+  it('XHR写请求附同源会话CSRF，缺失时交由后端拒绝', async () => {
+    setCsrf('b'.repeat(64));
+    try {
+      const { pending, xhr } = start();
+      expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-CSRF-Token', 'b'.repeat(64));
+      xhr.onload?.();
+      await pending;
+    } finally {
+      setCsrf(undefined);
+    }
+    const { pending, xhr } = start();
+    expect(xhr.setRequestHeader).not.toHaveBeenCalledWith('X-CSRF-Token', expect.anything());
+    xhr.status = 403;
+    xhr.responseText = JSON.stringify({
+      code: 'FORBIDDEN',
+      message: '拒绝请求',
+      retryable: false,
+      requestId: '00000000-0000-4000-8000-000000000001',
+    });
+    xhr.onload?.();
+    await expect(pending).rejects.toMatchObject({ status: 403, code: 'FORBIDDEN' });
+  });
   it('进度使用浏览器字节数，不手写Content-Type', async () => {
     const { xhr, pending, onProgress, body } = start();
     xhr.upload.onprogress?.(

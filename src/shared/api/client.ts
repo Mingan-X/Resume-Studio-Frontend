@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { AppError, contractError, httpError, transportError } from './errors';
-import { notifyAuthFailure } from './sessionContext';
+import { csrfHeaders, notifyAuthFailure } from './sessionContext';
 
 export interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -57,7 +57,11 @@ export async function apiRequest<T>(
     const timeout = AbortSignal.timeout(options.timeoutMs ?? 15000);
     const signal = options.signal ? AbortSignal.any([options.signal, timeout]) : timeout;
     try {
-      const headers = new Headers({ Accept: 'application/json', ...options.headers });
+      const headers = new Headers({
+        Accept: 'application/json',
+        ...csrfHeaders(method),
+        ...options.headers,
+      });
       if (options.body !== undefined) headers.set('Content-Type', 'application/json');
       if (options.idempotencyKey) headers.set('Idempotency-Key', options.idempotencyKey);
       const response = await fetch(url, {

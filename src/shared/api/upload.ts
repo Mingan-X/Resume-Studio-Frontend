@@ -2,7 +2,7 @@ import type { z } from 'zod';
 
 import { apiUrl } from './client';
 import { contractError, httpError, transportError } from './errors';
-import { notifyAuthFailure } from './sessionContext';
+import { csrfHeaders, notifyAuthFailure } from './sessionContext';
 
 export interface UploadOptions {
   signal?: AbortSignal;
@@ -28,6 +28,8 @@ export function uploadRequest<T>(
     xhr.timeout = options.timeoutMs ?? 60000;
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.setRequestHeader('Idempotency-Key', options.idempotencyKey);
+    for (const [name, value] of Object.entries(csrfHeaders('POST')))
+      xhr.setRequestHeader(name, value);
     // FormData的multipart边界交给浏览器；同源Cookie由XHR自动携带。
     xhr.upload.onprogress = (event) =>
       options.onProgress?.(event.loaded, event.lengthComputable ? event.total : null);

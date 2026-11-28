@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { apiRequest, apiUrl } from './client';
 import { AppError, normalizeError } from './errors';
+import { setCsrf } from './sessionContext';
 
 const schema = z.object({ value: z.string() });
 const requestId = '00000000-0000-4000-8000-000000000001';
@@ -14,6 +15,20 @@ function mockFetch() {
 }
 
 describe('HTTP边界与重试', () => {
+  it('CSRF仅附于写请求，GET不附头且不读取Cookie', async () => {
+    setCsrf('a'.repeat(64));
+    const fetcher = mockFetch().mockImplementation(async () => Response.json({ value: 'ok' }));
+    try {
+      await apiRequest('/sample', schema);
+      expect(new Headers(fetcher.mock.calls[0]?.[1]?.headers).get('X-CSRF-Token')).toBeNull();
+      await apiRequest('/sample', schema, { method: 'PATCH', body: {} });
+      expect(new Headers(fetcher.mock.calls[1]?.[1]?.headers).get('X-CSRF-Token')).toBe(
+        'a'.repeat(64),
+      );
+    } finally {
+      setCsrf(undefined);
+    }
+  });
   it('解析数据、忽略未知字段并固定同源地址', async () => {
     const fetcher = mockFetch().mockResolvedValue(Response.json({ value: 'ok', extra: 1 }));
     expect(await apiRequest('/sample', schema)).toEqual({ value: 'ok' });

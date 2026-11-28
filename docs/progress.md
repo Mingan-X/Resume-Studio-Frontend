@@ -8,6 +8,11 @@
 - 只记录实际运行过的检查；基于MSW完成的功能写明“待联调”。
 - 已有记录不改写；发现错误时追加更正记录。
 
+## 2026-11-28 F3.1-T4 写请求CSRF（feature/f3.1-auth）
+
+- fetch与XHR非GET/HEAD统一附内存X-CSRF-Token；GET不附头，缺值不伪造，后端403原样处理。Origin由浏览器发送，不手写或读取Cookie。登录成功轮换后使用新CSRF，退出后清除。
+- typecheck、Lint、115项测试、build、24项E2E通过；MSW登录/登出校验新旧CSRF，单元覆盖fetch/XHR与缺值403。首次新增测试复用已消费Response导致contract错误，模拟改为每请求新Response后通过，业务实现未放宽。
+
 ## 2026-11-28 F3.1-T3 守卫与失效处理（feature/f3.1-auth）
 
 - 路由先校验输入，再fetch会话；匿名转/login?redirect，登录返回站内原地址。401取消/清空资源缓存和CSRF/用户状态后跳登录；403显示安全无权限信息并保留requestId，404保持“不存在或无权访问”。顶部当前账号和退出已接线。
